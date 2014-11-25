@@ -13,9 +13,13 @@ type ErrorCode =
     | InvalidArgumentFormat of char * string
 type SchemeParsingResult = Result<SchemaInfo, ErrorCode>
 
+let (|SupportedFormat|_|) = function
+    | "" -> Some Bool
+    | _ -> None
+
 let parseElement = function
     | (arg, _) when not(Char.IsLetter arg) -> Failure(InvalidArgumentName arg)
-    | (arg, format) when format = "" -> Success(arg, Bool)
+    | (arg, SupportedFormat format) -> Success(arg, format)
     | (arg, format) -> Failure(InvalidArgumentFormat(arg, format))
 
 let rec parseSchemaElements schema = function
