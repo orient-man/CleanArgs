@@ -15,8 +15,8 @@ type SchemeParsingResult = Result<SchemaInfo, ErrorCode>
 
 let parseElement = function
     | (arg, _) when not(Char.IsLetter arg) -> Failure(InvalidArgumentName arg)
-    | (arg, format) when format <> "" -> Failure(InvalidArgumentFormat(arg, format))
-    | elem -> Success elem
+    | (arg, format) when format = "" -> Success(arg, Bool)
+    | (arg, format) -> Failure(InvalidArgumentFormat(arg, format))
 
 let rec parseSchemaElements schema = function
     | [] -> Success(schema)
@@ -29,7 +29,6 @@ let parseSchema (schema : string) : SchemeParsingResult =
     |> List.filter (fun s -> s.Length > 0)
     |> List.map (fun s -> (s.[0], s.Substring(1)))
     |> parseSchemaElements []
-    |> Rop.map (List.map (fun (name, _) -> (name, Bool)))
 
 type ArgValue = | Flag of bool
 
