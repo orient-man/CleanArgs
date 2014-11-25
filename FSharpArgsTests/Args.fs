@@ -13,13 +13,15 @@ type ErrorCode =
     | InvalidArgumentFormat of char * string
 type SchemeParsingResult = Result<SchemaInfo, ErrorCode>
 
+let parseElement = function
+    | (arg, _) when not(Char.IsLetter arg) -> Failure(InvalidArgumentName arg)
+    | (arg, format) when format = "~" -> Failure(InvalidArgumentFormat(arg, format))
+    | elem -> Success elem
+
 let rec parseSchemaElements schema = function
     | [] -> Success(schema)
-    | (arg, _)::_ when not(Char.IsLetter arg) -> Failure(InvalidArgumentName arg)
-    | (arg, format)::tail ->
-        if format <> "~"
-        then parseSchemaElements ((arg, format)::schema) tail
-        else Failure(InvalidArgumentFormat(arg, format))
+    | elem::tail ->
+        elem |> parseElement >>= (fun elem -> parseSchemaElements (elem::schema) tail)
 
 let parseSchema (schema : string) : SchemeParsingResult =
     schema.Split ','
