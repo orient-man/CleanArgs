@@ -1,14 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using CSharpArgs;
 
 namespace CleanArgs
 {
-    class Program
+    public static class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
+            try
+            {
+                var arg = new Args("l,p#,d*", args);
+                var logging = arg.GetBoolean('l');
+                var port = arg.GetInt('p');
+                var directory = arg.GetString('d');
+                ExecuteApplication(logging, port, directory);
+            }
+            catch (ArgsException e)
+            {
+                Console.WriteLine("Argument error: {0}", e.GetErrorMessage());
+            }
+        }
+
+        private static void ExecuteApplication(bool logging, int port, String directory)
+        {
+            Console.WriteLine(
+                "logging is {0}, port:{1}, directory:{2}",
+                logging,
+                port,
+                directory);
         }
     }
 }
