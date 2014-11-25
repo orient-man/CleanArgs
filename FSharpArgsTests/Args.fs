@@ -1,9 +1,9 @@
 ﻿module FSharpArgsTests
 
 open System
+open Rop
 open FsUnit
 open NUnit.Framework
-open Rop
 open Swensen.Unquote
 
 type SchemaElement = | Bool
@@ -15,13 +15,12 @@ type SchemeParsingResult = Result<SchemaInfo, ErrorCode>
 
 let parseElement = function
     | (arg, _) when not(Char.IsLetter arg) -> Failure(InvalidArgumentName arg)
-    | (arg, format) when format = "~" -> Failure(InvalidArgumentFormat(arg, format))
+    | (arg, format) when format <> "" -> Failure(InvalidArgumentFormat(arg, format))
     | elem -> Success elem
 
 let rec parseSchemaElements schema = function
     | [] -> Success(schema)
-    | elem::tail ->
-        elem |> parseElement >>= (fun elem -> parseSchemaElements (elem::schema) tail)
+    | e::tail -> e |> parseElement >>= (fun e -> parseSchemaElements (e::schema) tail)
 
 let parseSchema (schema : string) : SchemeParsingResult =
     schema.Split ','
