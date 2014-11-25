@@ -8,14 +8,18 @@ open Swensen.Unquote
 
 type SchemaElement = | Bool
 type SchemaInfo = (char * SchemaElement) list
-type ErrorCode = | InvalidArgumentName of char
+type ErrorCode =
+    | InvalidArgumentName of char
+    | InvalidArgumentFormat of char * string
 type SchemeParsingResult = Result<SchemaInfo, ErrorCode>
 
 let rec parseSchemaElements schema = function
     | [] -> Success(schema)
-    | (name, param)::tail when Char.IsLetter name ->
-        parseSchemaElements ((name, param)::schema) tail
-    | (name, _)::_ -> Failure(InvalidArgumentName name)
+    | (arg, _)::_ when not(Char.IsLetter arg) -> Failure(InvalidArgumentName arg)
+    | (arg, format)::tail ->
+        if format <> "~"
+        then parseSchemaElements ((arg, format)::schema) tail
+        else Failure(InvalidArgumentFormat(arg, format))
 
 let parseSchema (schema : string) : SchemeParsingResult =
     schema.Split ','
@@ -50,7 +54,13 @@ let ``One argument Bool schema``() =
 [<Test>]
 let ``Non letter schema is invalid``() =
     let actual = parseSchema "*"
-    let expected : SchemeParsingResult = Failure (InvalidArgumentName '1')
+    let expected : SchemeParsingResult = Failure(InvalidArgumentName '*')
+    test <@ expected = actual @>
+
+[<Test>]
+let ``Invalid argument format``() =
+    let actual = parseSchema "f~"
+    let expected : SchemeParsingResult = Failure(InvalidArgumentFormat ('f', "~"))
     test <@ expected = actual @>
 
 [<Test>]
