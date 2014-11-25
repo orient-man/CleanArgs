@@ -36,20 +36,20 @@ let parse (schema : string) args =
     |> List.ofSeq
 
 [<Test>]
-let ``Parses empty schema``() =
+let ``Empty schema is valid``() =
     let actual = parseSchema ""
     let expected : SchemeParsingResult = Success []
     test <@ expected = actual @>
 
 [<Test>]
-let ``Parses simple bool schema``() =
+let ``One argument Bool schema``() =
     let actual = parseSchema "x"
     let expected : SchemeParsingResult = Success [('x', Bool)]
     test <@ expected = actual @>
 
 [<Test>]
-let ``Invalid argument name``() =
-    let actual = parseSchema "1"
+let ``Non letter schema is invalid``() =
+    let actual = parseSchema "*"
     let expected : SchemeParsingResult = Failure (InvalidArgumentName '1')
     test <@ expected = actual @>
 
