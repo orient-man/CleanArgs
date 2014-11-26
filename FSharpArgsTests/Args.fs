@@ -4,7 +4,7 @@ open System
 open System.Globalization
 open Rop
 
-type SchemaElement = | Bool | String | StringList | Int | Double
+type SchemaElement = Bool | String | StringList | Int | Double
 type SchemaInfo = Map<char, SchemaElement>
 type ErrorCode =
     | InvalidArgumentName of char
