@@ -6,7 +6,7 @@ open FsUnit
 open NUnit.Framework
 open Swensen.Unquote
 
-type SchemaElement = | Bool
+type SchemaElement = | Bool | String
 type SchemaInfo = Map<char, SchemaElement>
 type ErrorCode =
     | InvalidArgumentName of char
@@ -15,6 +15,7 @@ type SchemeParsingResult = Result<SchemaInfo, ErrorCode>
 
 let (|SupportedFormat|_|) = function
     | "" -> Some Bool
+    | "*" -> Some String
     | _ -> None
 
 let parseElement = function
@@ -39,6 +40,7 @@ type Marshaller<'a> = string list -> Result<'a * string list, ErrorCode>
 
 let getMarshaller = function
     | Bool -> (fun args -> Success(true, args))
+    | _ -> failwith "Not implemented"
 
 type ArgValue = | Flag of bool
 
@@ -71,6 +73,24 @@ let ``Non letter schema is invalid``() =
 let ``Invalid argument format``() =
     let actual = parseSchema "f~"
     let expected : SchemeParsingResult = Failure(InvalidArgumentFormat('f', "~"))
+    test <@ expected = actual @>
+
+[<Test>]
+let ``One argument String schema``() =
+    let actual = parseSchema "x*"
+    let expected = Success(Map.empty.Add('x', String))
+    test <@ expected = actual @>
+
+[<Test>]
+let ``Multiple arguments schema``() =
+    let actual = parseSchema "x*,y"
+    let expected = Success(Map.empty.Add('x', String).Add('y', Bool))
+    test <@ expected = actual @>
+
+[<Test>]
+let ``Spaces in format``() =
+    let actual = parseSchema "x*, y"
+    let expected = Success(Map.empty.Add('x', String).Add('y', Bool))
     test <@ expected = actual @>
 
 [<Test>]
