@@ -45,15 +45,27 @@ let parseSchema (schema : string) : SchemeParsingResult =
 type ArgValue =
     | BoolValue of bool
     | StringValue of string
+    | StringListValue of string list
     | IntValue of int
     | DoubleValue of double
 type ParsingResult = Result<Map<char, ArgValue>, ErrorCode>
+
+let (|ValidArgument|_|) arg =
+    match List.ofSeq arg with | '-'::c::_ -> Some c | _ -> None
 
 let BoolMarshaller arg tail = Success((arg, BoolValue true), tail)
 
 let StringMarshaller arg = function
     | value::tail -> Success((arg, StringValue value), tail)
     | _ -> Failure(MissingString arg)
+
+let StringListMarshaller arg tail =
+    let rec collectValues acc = function
+        | ValidArgument _::tail -> (acc, tail)
+        | value::tail -> collectValues (value::acc) tail
+        | _ -> (acc, [])
+    let value, tail = collectValues [] tail
+    Success((arg, StringListValue (List.rev value)), tail)
 
 let IntMarshaller arg = function
     | value::tail ->
@@ -72,12 +84,9 @@ let DoubleMarshaller arg = function
 let getMarshaller = function
     | Bool -> BoolMarshaller
     | String -> StringMarshaller
+    | StringList -> StringListMarshaller
     | Int -> IntMarshaller
     | Double -> DoubleMarshaller
-    | _ -> failwith "Not implemented"
-
-let (|ValidArgument|_|) arg =
-    match List.ofSeq arg with | '-'::c::_ -> Some c | _ -> None
 
 let parseArgument (schema : SchemaInfo) = function
     | ValidArgument c::args -> args |> getMarshaller schema.[c] c |> map Some

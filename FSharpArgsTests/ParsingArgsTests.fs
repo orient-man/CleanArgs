@@ -42,6 +42,12 @@ let ``Missing string argument``() =
     test <@ expected = actual @>
 
 [<Test>]
+let ``String list argument``() =
+    let actual = parseArgs "x**" ["-x"; "a"; "b"]
+    let expected = Success(Map.empty.Add('x', StringListValue ["a"; "b"]))
+    test <@ expected = actual @>
+
+[<Test>]
 let ``Int argument``() =
     let actual = parseArgs "x#" ["-x"; "15"]
     let expected = Success(Map.empty.Add('x', IntValue 15))
