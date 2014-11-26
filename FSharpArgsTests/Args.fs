@@ -49,6 +49,8 @@ type ArgValue =
     | IntValue of int
     | DoubleValue of double
 type ParsingResult = Result<Map<char, ArgValue>, ErrorCode>
+type MarshallingResult = Result<((char * ArgValue) * string list), ErrorCode>
+type Marshaller = char -> string list -> MarshallingResult
 
 let (|ValidArgument|_|) arg =
     match List.ofSeq arg with | '-'::c::_ -> Some c | _ -> None
@@ -59,7 +61,7 @@ let StringMarshaller arg = function
     | value::tail -> Success((arg, StringValue value), tail)
     | _ -> Failure(MissingString arg)
 
-let StringListMarshaller arg tail =
+let StringListMarshaller arg tail : MarshallingResult =
     let rec collectValues acc = function
         | ValidArgument _::tail -> (acc, tail)
         | value::tail -> collectValues (value::acc) tail
@@ -81,7 +83,8 @@ let DoubleMarshaller arg = function
         | _ -> Failure(InvalidDouble(arg, value))
     | _ -> Failure(MissingDouble arg)
 
-let getMarshaller = function
+let getMarshaller elem : Marshaller =
+    match elem with
     | Bool -> BoolMarshaller
     | String -> StringMarshaller
     | StringList -> StringListMarshaller

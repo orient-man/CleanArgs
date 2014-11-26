@@ -6,3 +6,6 @@ parseElement ('a', "");;
 parseElement ('b', "#");;
 parseElement ('c', "%");;
 parseElement ('$', "#");;
+
+StringMarshaller 'x' ["a"];;
+StringListMarshaller 'x' ["a"; "b"];;
