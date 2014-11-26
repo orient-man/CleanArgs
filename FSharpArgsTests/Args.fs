@@ -39,7 +39,7 @@ let parseSchema (schema : string) : SchemeParsingResult =
 type ArgValue = | BoolValue of bool
 type ParsingResult = Result<Map<char, ArgValue>, ErrorCode>
 
-let BoolMarshaller c args = Success((c, BoolValue true), args)
+let BoolMarshaller arg tail = Success((arg, BoolValue true), tail)
 
 let getMarshaller = function
     | Bool -> BoolMarshaller
