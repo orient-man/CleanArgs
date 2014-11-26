@@ -37,6 +37,7 @@ let parseSchema (schema : string) : SchemeParsingResult =
     |> map Map.ofList
 
 type ArgValue = | BoolValue of bool
+type ParsingResult = Result<Map<char, ArgValue>, ErrorCode>
 
 let getMarshaller = function
     | Bool -> (fun c args -> Success((c, BoolValue true), args))
@@ -58,7 +59,7 @@ let rec readValues schema (values, args) =
     | [] -> Success(values)
     | _ -> parseArgument schema args |> map append >>= (readValues schema)
 
-let parseArgs schema args =
+let parseArgs schema args : ParsingResult =
     schema
     |> parseSchema
     >>= (fun schema -> readValues schema ([], args))
