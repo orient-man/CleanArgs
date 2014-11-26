@@ -8,6 +8,7 @@ type SchemaInfo = Map<char, SchemaElement>
 type ErrorCode =
     | InvalidArgumentName of char
     | InvalidArgumentFormat of char * string
+    | MissingString of char
 type SchemeParsingResult = Result<SchemaInfo, ErrorCode>
 
 let (|SupportedFormat|_|) = function
@@ -36,13 +37,20 @@ let parseSchema (schema : string) : SchemeParsingResult =
     |> parseSchemaElements []
     |> map Map.ofList
 
-type ArgValue = | BoolValue of bool
+type ArgValue =
+    | BoolValue of bool
+    | StringValue of string
 type ParsingResult = Result<Map<char, ArgValue>, ErrorCode>
 
 let BoolMarshaller arg tail = Success((arg, BoolValue true), tail)
 
+let StringMarshaller arg = function
+    | value::tail -> Success((arg, StringValue value), tail)
+    | _ -> Failure(MissingString arg)
+
 let getMarshaller = function
     | Bool -> BoolMarshaller
+    | String -> StringMarshaller
     | _ -> failwith "Not implemented"
 
 let (|ValidArgument|_|) arg =
@@ -52,7 +60,7 @@ let parseArgument (schema : SchemaInfo) = function
     | ValidArgument c::args -> args |> getMarshaller schema.[c] c |> map Some
     | args -> Success None
 
-let parseArgs (schema : String) args : ParsingResult =
+let parseArgs (schema : string) args : ParsingResult =
     let rec parse (schema : SchemaInfo) (values, args) =
         let append = function
             | Some(value, args) -> (value::values, args)
