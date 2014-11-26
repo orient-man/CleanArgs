@@ -60,7 +60,7 @@ let ``Empty schema is valid``() =
 [<Test>]
 let ``One argument Bool schema``() =
     let actual = parseSchema "x"
-    let expected : SchemeParsingResult = Success(Map.empty.Add('x', Bool))
+    let expected = Success(Map.empty.Add('x', Bool))
     test <@ expected = actual @>
 
 [<Test>]
