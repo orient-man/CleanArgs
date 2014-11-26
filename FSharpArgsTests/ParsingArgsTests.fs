@@ -24,6 +24,12 @@ let ``Empty args list``() =
     test <@ expected = actual @>
 
 [<Test>]
+let ``Skips non args``() =
+    let actual = parseArgs "x" ["not_an_arg"; "-x"]
+    let expected = Success(Map.empty.Add('x', BoolValue true))
+    test <@ expected = actual @>
+
+[<Test>]
 let ``String argument``() =
     let actual = parseArgs "x*" ["-x"; "string"]
     let expected = Success(Map.empty.Add('x', StringValue "string"))
