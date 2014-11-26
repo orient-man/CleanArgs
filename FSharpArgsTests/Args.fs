@@ -62,8 +62,9 @@ let StringMarshaller arg = function
     | _ -> Failure(MissingString arg)
 
 let StringListMarshaller arg tail : MarshallingResult =
-    let rec collectValues acc = function
-        | ValidArgument _::tail -> (acc, tail)
+    let rec collectValues acc args =
+        match args with
+        | ValidArgument _::_ -> (acc, args)
         | value::tail -> collectValues (value::acc) tail
         | _ -> (acc, [])
     let value, tail = collectValues [] tail

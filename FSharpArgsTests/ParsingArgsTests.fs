@@ -48,6 +48,18 @@ let ``String list argument``() =
     test <@ expected = actual @>
 
 [<Test>]
+let ``Empty string list argument``() =
+    let actual = parseArgs "x**" ["-x"]
+    let expected = Success(Map.empty.Add('x', StringListValue []))
+    test <@ expected = actual @>
+
+[<Test>]
+let ``String list argument with following argument``() =
+    let actual = parseArgs "x**,y#" ["-x"; "a"; "-y"; "5"]
+    let expected = Success(Map.empty.Add('x', StringListValue ["a"]).Add('y', IntValue 5))
+    test <@ expected = actual @>
+
+[<Test>]
 let ``Int argument``() =
     let actual = parseArgs "x#" ["-x"; "15"]
     let expected = Success(Map.empty.Add('x', IntValue 15))
