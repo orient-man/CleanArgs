@@ -39,8 +39,10 @@ let parseSchema (schema : string) : SchemeParsingResult =
 type ArgValue = | BoolValue of bool
 type ParsingResult = Result<Map<char, ArgValue>, ErrorCode>
 
+let BoolMarshaller c args = Success((c, BoolValue true), args)
+
 let getMarshaller = function
-    | Bool -> (fun c args -> Success((c, BoolValue true), args))
+    | Bool -> BoolMarshaller
     | _ -> failwith "Not implemented"
 
 let (|ValidArgument|_|) arg =
