@@ -9,6 +9,8 @@ type ErrorCode =
     | InvalidArgumentName of char
     | InvalidArgumentFormat of char * string
     | MissingString of char
+    | MissingInt of char
+    | InvalidInt of char * string
 type SchemeParsingResult = Result<SchemaInfo, ErrorCode>
 
 let (|SupportedFormat|_|) = function
@@ -40,6 +42,7 @@ let parseSchema (schema : string) : SchemeParsingResult =
 type ArgValue =
     | BoolValue of bool
     | StringValue of string
+    | IntValue of int
 type ParsingResult = Result<Map<char, ArgValue>, ErrorCode>
 
 let BoolMarshaller arg tail = Success((arg, BoolValue true), tail)
@@ -48,9 +51,17 @@ let StringMarshaller arg = function
     | value::tail -> Success((arg, StringValue value), tail)
     | _ -> Failure(MissingString arg)
 
+let IntMarshaller arg = function
+    | value::tail ->
+        match Int32.TryParse value with
+        | (true, value) -> Success((arg, IntValue value), tail)
+        | _ -> Failure(InvalidInt(arg, value))
+    | _ -> Failure(MissingInt arg)
+
 let getMarshaller = function
     | Bool -> BoolMarshaller
     | String -> StringMarshaller
+    | Int -> IntMarshaller
     | _ -> failwith "Not implemented"
 
 let (|ValidArgument|_|) arg =
