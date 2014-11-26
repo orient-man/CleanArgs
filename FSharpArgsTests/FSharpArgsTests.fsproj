@@ -51,6 +51,8 @@
   <ItemGroup>
     <Compile Include="Rop.fs" />
     <Compile Include="Args.fs" />
+    <Compile Include="ParsingSchemaTests.fs" />
+    <Compile Include="ParsingArgsTests.fs" />
     <None Include="Script.fsx" />
     <Content Include="packages.config" />
     <Content Include="app.config" />
