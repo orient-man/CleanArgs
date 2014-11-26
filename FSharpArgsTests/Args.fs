@@ -16,17 +16,13 @@ type ErrorCode =
     | InvalidDouble of char * string
 type SchemeParsingResult = Result<SchemaInfo, ErrorCode>
 
-let (|SupportedFormat|_|) = function
-    | "" -> Some Bool
-    | "*" -> Some String
-    | "**" -> Some StringList
-    | "#" -> Some Int
-    | "##" -> Some Double
-    | _ -> None
-
 let parseElement = function
     | (arg, _) when not(Char.IsLetter arg) -> Failure(InvalidArgumentName arg)
-    | (arg, SupportedFormat format) -> Success(arg, format)
+    | (arg, "") -> Success(arg, Bool)
+    | (arg, "*") -> Success(arg, String)
+    | (arg, "**") -> Success(arg, StringList)
+    | (arg, "#") -> Success(arg, Int)
+    | (arg, "##") -> Success(arg, Double)
     | (arg, format) -> Failure(InvalidArgumentFormat(arg, format))
 
 let rec parseSchemaElements schema = function
