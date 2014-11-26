@@ -50,19 +50,16 @@ let (|ValidArgument|_|) arg =
 
 let parseArgument (schema : SchemaInfo) = function
     | ValidArgument c::args -> args |> getMarshaller schema.[c] c |> map Some
-    | args -> Success(None)
+    | args -> Success None
 
-let rec readValues schema (values, args) =
-    let append = function
-        | Some(value, args) -> (value::values, args)
-        | None -> (values, args |> List.tail)
+let parseArgs (schema : String) args : ParsingResult =
+    let rec parse (schema : SchemaInfo) (values, args) =
+        let append = function
+            | Some(value, args) -> (value::values, args)
+            | None -> (values, args |> List.tail)
 
-    match args with
-    | [] -> Success(values)
-    | _ -> parseArgument schema args |> map append >>= (readValues schema)
+        match args with
+        | [] -> Success values
+        | _ -> parseArgument schema args |> map append >>= (parse schema)
 
-let parseArgs schema args : ParsingResult =
-    schema
-    |> parseSchema
-    >>= (fun schema -> readValues schema ([], args))
-    |> map Map.ofList
+    parseSchema schema >>= (fun schema -> parse schema ([], args)) |> map Map.ofList
