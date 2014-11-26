@@ -34,6 +34,11 @@ let parseSchema (schema : string) : SchemeParsingResult =
     |> List.map (fun s -> (s.[0], s.Substring(1)))
     |> parseSchemaElements []
 
+type Marshaller<'a> = string list -> Result<'a * string list, ErrorCode>
+
+let getMarshaller = function
+    | Bool -> (fun args -> Success(true, args))
+
 type ArgValue = | Flag of bool
 
 let parse (schema : string) args =
