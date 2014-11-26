@@ -7,7 +7,7 @@ open NUnit.Framework
 open Swensen.Unquote
 
 type SchemaElement = | Bool
-type SchemaInfo = (char * SchemaElement) list
+type SchemaInfo = Map<char, SchemaElement>
 type ErrorCode =
     | InvalidArgumentName of char
     | InvalidArgumentFormat of char * string
@@ -33,6 +33,7 @@ let parseSchema (schema : string) : SchemeParsingResult =
     |> List.filter (fun s -> s.Length > 0)
     |> List.map (fun s -> (s.[0], s.Substring(1)))
     |> parseSchemaElements []
+    |> Rop.map Map.ofList
 
 type Marshaller<'a> = string list -> Result<'a * string list, ErrorCode>
 
@@ -51,13 +52,13 @@ let parse (schema : string) args =
 [<Test>]
 let ``Empty schema is valid``() =
     let actual = parseSchema ""
-    let expected : SchemeParsingResult = Success []
+    let expected : SchemeParsingResult = Success Map.empty
     test <@ expected = actual @>
 
 [<Test>]
 let ``One argument Bool schema``() =
     let actual = parseSchema "x"
-    let expected : SchemeParsingResult = Success [('x', Bool)]
+    let expected : SchemeParsingResult = Success(Map.empty.Add('x', Bool))
     test <@ expected = actual @>
 
 [<Test>]
@@ -69,7 +70,7 @@ let ``Non letter schema is invalid``() =
 [<Test>]
 let ``Invalid argument format``() =
     let actual = parseSchema "f~"
-    let expected : SchemeParsingResult = Failure(InvalidArgumentFormat ('f', "~"))
+    let expected : SchemeParsingResult = Failure(InvalidArgumentFormat('f', "~"))
     test <@ expected = actual @>
 
 [<Test>]
