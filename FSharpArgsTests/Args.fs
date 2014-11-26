@@ -36,8 +36,10 @@ let parseSchema (schema : string) : SchemeParsingResult =
     |> parseSchemaElements []
     |> map Map.ofList
 
+type ArgValue = | BoolValue of bool
+
 let getMarshaller = function
-    | Bool -> (fun c args -> Success((c, box true), args))
+    | Bool -> (fun c args -> Success((c, BoolValue true), args))
     | _ -> failwith "Not implemented"
 
 let (|ValidArgument|_|) arg =
