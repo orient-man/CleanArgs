@@ -39,7 +39,7 @@ let parseSchema (schema : string) : SchemeParsingResult =
 type Marshaller<'a> = string list -> Result<'a * string list, ErrorCode>
 
 let getMarshaller = function
-    | Bool -> (fun args -> Success(Some(box true), args))
+    | Bool -> (fun c args -> Success((c, box true), args))
     | _ -> failwith "Not implemented"
 
 type ArgValue = | Flag of bool
@@ -55,9 +55,21 @@ let (|ValidArgument|_|) arg =
     match List.ofSeq arg with | '-'::c::_ -> Some(c) | _ -> None
 
 let parseArgument (schema : SchemaInfo) = function
-    | ValidArgument c::args -> args |> getMarshaller schema.[c]
-    | args -> Success(None, args)
+    | ValidArgument c::args ->
+        args |> getMarshaller schema.[c] c |> Rop.map (fun (v, args) -> Some(v, args))
+    | args -> Success(None)
+
+let rec readValues schema (values, args) =
+    let append = function
+        | Some(value, args) -> (value::values, args)
+        | None -> (values, args |> List.tail)
+
+    match args with
+    | [] -> Success(values)
+    | _ -> parseArgument schema args |> Rop.map append >>= (readValues schema)
 
 let parseArgs schema args =
-    parseSchema schema
-    >>= (fun _ -> Success(Map.empty.Add('x', box true)))
+    schema
+    |> parseSchema
+    >>= (fun schema -> readValues schema ([], args))
+    |> map Map.ofList
