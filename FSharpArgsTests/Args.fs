@@ -1,6 +1,7 @@
 ﻿module Args
 
 open System
+open System.Globalization
 open Rop
 
 type SchemaElement = | Bool | String | StringList | Int | Double
@@ -11,6 +12,8 @@ type ErrorCode =
     | MissingString of char
     | MissingInt of char
     | InvalidInt of char * string
+    | MissingDouble of char
+    | InvalidDouble of char * string
 type SchemeParsingResult = Result<SchemaInfo, ErrorCode>
 
 let (|SupportedFormat|_|) = function
@@ -43,6 +46,7 @@ type ArgValue =
     | BoolValue of bool
     | StringValue of string
     | IntValue of int
+    | DoubleValue of double
 type ParsingResult = Result<Map<char, ArgValue>, ErrorCode>
 
 let BoolMarshaller arg tail = Success((arg, BoolValue true), tail)
@@ -58,10 +62,18 @@ let IntMarshaller arg = function
         | _ -> Failure(InvalidInt(arg, value))
     | _ -> Failure(MissingInt arg)
 
+let DoubleMarshaller arg = function
+    | value::tail ->
+        match Double.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture) with
+        | (true, value) -> Success((arg, DoubleValue value), tail)
+        | _ -> Failure(InvalidDouble(arg, value))
+    | _ -> Failure(MissingDouble arg)
+
 let getMarshaller = function
     | Bool -> BoolMarshaller
     | String -> StringMarshaller
     | Int -> IntMarshaller
+    | Double -> DoubleMarshaller
     | _ -> failwith "Not implemented"
 
 let (|ValidArgument|_|) arg =

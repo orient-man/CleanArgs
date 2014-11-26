@@ -52,3 +52,21 @@ let ``Invalid int argument``() =
     let actual = parseArgs "x#" ["-x"; "wrong"]
     let expected : ParsingResult = Failure(InvalidInt('x', "wrong"))
     test <@ expected = actual @>
+
+[<Test>]
+let ``Double argument``() =
+    let actual = parseArgs "x##" ["-x"; "3.14"]
+    let expected = Success(Map.empty.Add('x', DoubleValue 3.14))
+    test <@ expected = actual @>
+
+[<Test>]
+let ``Missing double argument``() =
+    let actual = parseArgs "x##" ["-x"]
+    let expected : ParsingResult = Failure(MissingDouble 'x')
+    test <@ expected = actual @>
+
+[<Test>]
+let ``Invalid double argument``() =
+    let actual = parseArgs "x##" ["-x"; "wrong"]
+    let expected : ParsingResult = Failure(InvalidDouble('x', "wrong"))
+    test <@ expected = actual @>
