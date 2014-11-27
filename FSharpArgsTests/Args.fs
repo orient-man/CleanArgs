@@ -33,10 +33,11 @@ let rec parseSchemaElements schema = function
 
 let parseSchema (schema : string) : SchemaParsingResult =
     schema.Split ','
-    |> List.ofArray
-    |> List.map (fun s -> s.Trim())
-    |> List.filter (fun s -> s.Length > 0)
-    |> List.map (fun s -> (s.[0], s.Substring(1)))
+    |> Seq.ofArray
+    |> Seq.map (fun s -> s.Trim())
+    |> Seq.filter (fun s -> s.Length > 0)
+    |> Seq.map (fun s -> (s.[0], s.Substring(1)))
+    |> List.ofSeq
     |> parseSchemaElements []
     |> map Map.ofList
 
