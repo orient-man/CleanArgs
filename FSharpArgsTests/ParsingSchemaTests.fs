@@ -8,7 +8,7 @@ open Swensen.Unquote
 [<Test>]
 let ``Empty schema is valid``() =
     let actual = parseSchema ""
-    let expected : SchemeParsingResult = Success Map.empty
+    let expected : SchemaParsingResult = Success Map.empty
     test <@ expected = actual @>
 
 [<Test>]
@@ -20,13 +20,13 @@ let ``Bool argument type definition``() =
 [<Test>]
 let ``Non letter schema is invalid``() =
     let actual = parseSchema "*"
-    let expected : SchemeParsingResult = Failure(InvalidArgumentName '*')
+    let expected : SchemaParsingResult = Failure(InvalidArgumentName '*')
     test <@ expected = actual @>
 
 [<Test>]
 let ``Invalid argument format``() =
     let actual = parseSchema "f~"
-    let expected : SchemeParsingResult = Failure(InvalidArgumentFormat('f', "~"))
+    let expected : SchemaParsingResult = Failure(InvalidArgumentFormat('f', "~"))
     test <@ expected = actual @>
 
 [<Test>]

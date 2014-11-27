@@ -4,8 +4,6 @@ open System
 open System.Globalization
 open Rop
 
-type SchemaElement = Bool | String | StringList | Int | Double
-type SchemaInfo = Map<char, SchemaElement>
 type ErrorCode =
     | InvalidArgumentName of char
     | InvalidArgumentFormat of char * string
@@ -14,7 +12,11 @@ type ErrorCode =
     | InvalidInt of char * string
     | MissingDouble of char
     | InvalidDouble of char * string
-type SchemeParsingResult = Result<SchemaInfo, ErrorCode>
+
+// Parsing schema
+type SchemaElement = Bool | String | StringList | Int | Double
+type SchemaInfo = Map<char, SchemaElement>
+type SchemaParsingResult = Result<SchemaInfo, ErrorCode>
 
 let parseElement = function
     | (arg, _) when not(Char.IsLetter arg) -> Failure(InvalidArgumentName arg)
@@ -29,7 +31,7 @@ let rec parseSchemaElements schema = function
     | [] -> Success(schema)
     | e::tail -> e |> parseElement >>= (fun e -> parseSchemaElements (e::schema) tail)
 
-let parseSchema (schema : string) : SchemeParsingResult =
+let parseSchema (schema : string) : SchemaParsingResult =
     schema.Split ','
     |> List.ofArray
     |> List.map (fun s -> s.Trim())
@@ -38,13 +40,13 @@ let parseSchema (schema : string) : SchemeParsingResult =
     |> parseSchemaElements []
     |> map Map.ofList
 
+// Marshallers
 type ArgValue =
     | BoolValue of bool
     | StringValue of string
     | StringListValue of string list
     | IntValue of int
     | DoubleValue of double
-type ParsingResult = Result<Map<char, ArgValue>, ErrorCode>
 type MarshallingResult = Result<((char * ArgValue) * string list), ErrorCode>
 type Marshaller = char -> string list -> MarshallingResult
 
@@ -87,6 +89,9 @@ let getMarshaller elem : Marshaller =
     | StringList -> StringListMarshaller
     | Int -> IntMarshaller
     | Double -> DoubleMarshaller
+
+// Parsing arguments
+type ParsingResult = Result<Map<char, ArgValue>, ErrorCode>
 
 let parseArgs (schema : string) args : ParsingResult =
     let rec parse (schema : SchemaInfo) acc = function
