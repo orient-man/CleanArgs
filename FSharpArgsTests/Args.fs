@@ -88,18 +88,13 @@ let getMarshaller elem : Marshaller =
     | Int -> IntMarshaller
     | Double -> DoubleMarshaller
 
-let parseArgument (schema : SchemaInfo) = function
-    | ValidArgument c::args -> args |> getMarshaller schema.[c] c |> map Some
-    | args -> Success None
-
 let parseArgs (schema : string) args : ParsingResult =
     let rec parse (schema : SchemaInfo) (values, args) =
-        let append = function
-            | Some(value, args) -> (value::values, args)
-            | None -> (values, args |> List.tail)
-
+        let append (value, args) = (value::values, args)
         match args with
-        | [] -> Success values
-        | _ -> parseArgument schema args |> map append >>= (parse schema)
+        | [] -> Success(values |> Map.ofList)
+        | ValidArgument c::args when schema.ContainsKey c ->
+            getMarshaller schema.[c] c args |> map append >>= (parse schema)
+        | _::tail -> parse schema (values, tail)
 
-    parseSchema schema >>= (fun schema -> parse schema ([], args)) |> map Map.ofList
+    parseSchema schema >>= (fun schema -> parse schema ([], args))

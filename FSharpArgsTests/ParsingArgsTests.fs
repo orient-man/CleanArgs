@@ -94,3 +94,9 @@ let ``Invalid double argument``() =
     let actual = parseArgs "x##" ["-x"; "wrong"]
     let expected : ParsingResult = Failure(InvalidDouble('x', "wrong"))
     test <@ expected = actual @>
+
+[<Test>]
+let ``Argument not in schema``() =
+    let actual = parseArgs "x" ["-y"]
+    let expected : ParsingResult = Success(Map.empty)
+    test <@ expected = actual @>
