@@ -49,7 +49,7 @@ type MarshallingResult = Result<((char * ArgValue) * string list), ErrorCode>
 type Marshaller = char -> string list -> MarshallingResult
 
 let (|ValidArgument|_|) arg =
-    match List.ofSeq arg with | '-'::c::_ -> Some c | _ -> None
+    match List.ofSeq arg with | '-'::c::[] -> Some c | _ -> None
 
 let BoolMarshaller arg tail = Success((arg, BoolValue true), tail)
 
