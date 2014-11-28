@@ -27,9 +27,9 @@ let parseElement = function
     | (arg, "##") -> Success(arg, Double)
     | elem -> Failure(InvalidArgumentFormat elem)
 
-let rec parseSchemaElements schema = function
-    | [] -> Success(schema)
-    | e::tail -> e |> parseElement >>= (fun e -> parseSchemaElements (e::schema) tail)
+let rec parseSchemaElements acc = function
+    | [] -> Success(acc)
+    | e::tail -> e |> parseElement >>= (fun e -> parseSchemaElements (e::acc) tail)
 
 let parseSchema (schema : string) : SchemaParsingResult =
     schema.Split ','
