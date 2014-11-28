@@ -25,7 +25,7 @@ let parseElement = function
     | (arg, "**") -> Success(arg, StringList)
     | (arg, "#") -> Success(arg, Int)
     | (arg, "##") -> Success(arg, Double)
-    | (arg, format) -> Failure(InvalidArgumentFormat(arg, format))
+    | elem -> Failure(InvalidArgumentFormat elem)
 
 let rec parseSchemaElements schema = function
     | [] -> Success(schema)
