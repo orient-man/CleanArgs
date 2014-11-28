@@ -99,7 +99,7 @@ let parseArgs (schema : string) args : ParsingResult =
     let rec parse (schema : SchemaInfo) acc = function
         | [] -> Success(acc |> Map.ofList)
         | ValidArgument arg::tail when schema.ContainsKey arg ->
-            let parseTail (value, args) = parse schema (value::acc) tail
+            let parseTail (value, tail) = parse schema (value::acc) tail
             schema.[arg].parse arg tail >>= parseTail
         | _::tail -> parse schema acc tail
 
