@@ -54,7 +54,7 @@ type Marshaller = char -> string list -> MarshallingResult
 let (|ValidArgument|_|) arg =
     match List.ofSeq arg with | '-'::c::[] -> Some c | _ -> None
 
-let BoolMarshaller arg tail = Success((arg, BoolValue true), tail)
+let BoolMarshaller arg tail : MarshallingResult = Success((arg, BoolValue true), tail)
 
 let StringMarshaller arg = function
     | value::tail -> Success((arg, StringValue value), tail)
