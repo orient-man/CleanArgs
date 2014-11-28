@@ -29,7 +29,7 @@ let parseElement = function
 
 let rec parseSchemaElements acc = function
     | [] -> Success(acc)
-    | e::tail -> e |> parseElement >>= (fun e -> parseSchemaElements (e::acc) tail)
+    | e::tail -> parseElement e >>= (fun e -> parseSchemaElements (e::acc) tail)
 
 let parseSchema (schema : string) : SchemaParsingResult =
     schema.Split ','
@@ -99,8 +99,8 @@ let parseArgs (schema : string) args : ParsingResult =
     let rec parse (schema : SchemaInfo) acc = function
         | [] -> Success(acc |> Map.ofList)
         | ValidArgument arg::tail when schema.ContainsKey arg ->
-            schema.[arg].parse arg tail
-            >>= fun (value, args) -> parse schema (value::acc) tail
+            let parseTail (value, args) = parse schema (value::acc) tail
+            schema.[arg].parse arg tail >>= parseTail
         | _::tail -> parse schema acc tail
 
     parseSchema schema >>= fun schema -> parse schema [] args
