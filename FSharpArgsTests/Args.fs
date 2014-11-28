@@ -83,13 +83,14 @@ let DoubleMarshaller arg = function
         | _ -> Failure(InvalidDouble(arg, value))
     | _ -> Failure(MissingDouble arg)
 
-let getMarshaller elem : Marshaller =
-    match elem with
-    | Bool -> BoolMarshaller
-    | String -> StringMarshaller
-    | StringList -> StringListMarshaller
-    | Int -> IntMarshaller
-    | Double -> DoubleMarshaller
+type SchemaElement with
+    member elem.parse : Marshaller =
+        match elem with
+        | Bool -> BoolMarshaller
+        | String -> StringMarshaller
+        | StringList -> StringListMarshaller
+        | Int -> IntMarshaller
+        | Double -> DoubleMarshaller
 
 // Parsing arguments
 type ParsingResult = Result<Map<char, ArgValue>, ErrorCode>
@@ -98,8 +99,8 @@ let parseArgs (schema : string) args : ParsingResult =
     let rec parse (schema : SchemaInfo) acc = function
         | [] -> Success(acc |> Map.ofList)
         | ValidArgument arg::tail when schema.ContainsKey arg ->
-            let marshaller = getMarshaller schema.[arg]
-            marshaller arg tail >>= (fun (value, args) -> parse schema (value::acc) tail)
+            schema.[arg].parse arg tail
+            >>= fun (value, args) -> parse schema (value::acc) tail
         | _::tail -> parse schema acc tail
 
-    parseSchema schema >>= (fun schema -> parse schema [] args)
+    parseSchema schema >>= fun schema -> parse schema [] args
