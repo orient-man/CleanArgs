@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpArgsTests", "CSharpAr
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpArgsTests", "FSharpArgsTests\FSharpArgsTests.fsproj", "{92EF2644-5A57-457A-8391-0A1759542792}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monads", "Monads\Monads.csproj", "{C0F411E5-6BF7-4BC3-B1D1-8AB2A9BFE4D4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{92EF2644-5A57-457A-8391-0A1759542792}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92EF2644-5A57-457A-8391-0A1759542792}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92EF2644-5A57-457A-8391-0A1759542792}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0F411E5-6BF7-4BC3-B1D1-8AB2A9BFE4D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0F411E5-6BF7-4BC3-B1D1-8AB2A9BFE4D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0F411E5-6BF7-4BC3-B1D1-8AB2A9BFE4D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0F411E5-6BF7-4BC3-B1D1-8AB2A9BFE4D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
