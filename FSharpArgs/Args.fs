@@ -29,17 +29,22 @@ let parseElement = function
 
 let rec parseSchemaElements acc = function
     | [] -> Success(acc)
-    | e::tail -> parseElement e >>= (fun e -> parseSchemaElements (e::acc) tail)
+    | e::tail -> check {
+        let! v = parseElement e in return! parseSchemaElements (v::acc) tail
+    }
 
 let parseSchema (schema : string) : SchemaParsingResult =
-    schema.Split ','
-    |> Seq.ofArray
-    |> Seq.map (fun s -> s.Trim())
-    |> Seq.filter (fun s -> s.Length > 0)
-    |> Seq.map (fun s -> (s.[0], s.Substring(1)))
-    |> List.ofSeq
-    |> parseSchemaElements []
-    |> map Map.ofList
+    check {
+        let! list =
+            schema.Split ','
+            |> Seq.ofArray
+            |> Seq.map (fun s -> s.Trim())
+            |> Seq.filter (fun s -> s.Length > 0)
+            |> Seq.map (fun s -> (s.[0], s.Substring(1)))
+            |> List.ofSeq
+            |> parseSchemaElements []
+        return Map.ofList list
+    }
 
 // Marshallers
 type ArgValue =
@@ -101,8 +106,12 @@ let parseArgs (schema : string) args : ParsingResult =
     let rec parse (schema : SchemaInfo) acc = function
         | [] -> Success(acc |> Map.ofList)
         | ValidArgument arg::tail when schema.ContainsKey arg ->
-            let parseTail (value, tail) = parse schema (value::acc) tail
-            schema.[arg].parse arg tail >>= parseTail
+            check {
+                let! (value, tail) = schema.[arg].parse arg tail
+                return! parse schema (value::acc) tail
+            }
         | _::tail -> parse schema acc tail
 
-    parseSchema schema >>= fun schema -> parse schema [] args
+    check {
+        let! schema = parseSchema schema in return! parse schema [] args
+    }

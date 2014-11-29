@@ -18,3 +18,10 @@ let map oneTrackFunction twoTrackInput =
 
 let (>>=) twoTrackInput switchFunction = 
     bind switchFunction twoTrackInput 
+
+type ResultBuilder() =
+    member this.Bind(m, f) = bind f m
+    member this.Return(x) = Success x
+    member this.ReturnFrom(m) = m
+
+let check = new ResultBuilder()
