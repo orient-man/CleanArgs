@@ -37,7 +37,7 @@ let ``String argument type definition``() =
 
 [<Test>]
 let ``StringList argument type definition``() =
-    let actual = parseSchema "x**"
+    let actual = parseSchema "x[*]"
     let expected = Success(Map.empty.Add('x', StringList))
     test <@ expected = actual @>
 

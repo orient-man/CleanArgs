@@ -22,7 +22,7 @@ let parseElement = function
     | (arg, _) when not(Char.IsLetter arg) -> Failure(InvalidArgumentName arg)
     | (arg, "") -> Success(arg, Bool)
     | (arg, "*") -> Success(arg, String)
-    | (arg, "**") -> Success(arg, StringList)
+    | (arg, "[*]") -> Success(arg, StringList)
     | (arg, "#") -> Success(arg, Int)
     | (arg, "##") -> Success(arg, Double)
     | elem -> Failure(InvalidArgumentFormat elem)

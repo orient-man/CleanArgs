@@ -43,19 +43,19 @@ let ``Missing string argument``() =
 
 [<Test>]
 let ``String list argument``() =
-    let actual = parseArgs "x**" ["-x"; "a"; "b"]
+    let actual = parseArgs "x[*]" ["-x"; "a"; "b"]
     let expected = Success(Map.empty.Add('x', StringListValue ["a"; "b"]))
     test <@ expected = actual @>
 
 [<Test>]
 let ``Empty string list argument``() =
-    let actual = parseArgs "x**" ["-x"]
+    let actual = parseArgs "x[*]" ["-x"]
     let expected = Success(Map.empty.Add('x', StringListValue []))
     test <@ expected = actual @>
 
 [<Test>]
 let ``String list argument with following argument``() =
-    let actual = parseArgs "x**,y#" ["-x"; "a"; "-y"; "5"]
+    let actual = parseArgs "x[*],y#" ["-x"; "a"; "-y"; "5"]
     let expected = Success(Map.empty.Add('x', StringListValue ["a"]).Add('y', IntValue 5))
     test <@ expected = actual @>
 
