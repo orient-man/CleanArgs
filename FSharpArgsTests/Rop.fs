@@ -1,4 +1,6 @@
-﻿module Rop
+﻿// Railway Oriented Programming
+// See: http://fsharpforfunandprofit.com/posts/recipe-part2/
+module Rop
 
 type Result<'TSuccess, 'TFailure> =
     | Success of 'TSuccess
