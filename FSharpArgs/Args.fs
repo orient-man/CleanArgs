@@ -48,17 +48,19 @@ type ArgValue =
     | StringListValue of string list
     | IntValue of int
     | DoubleValue of double
+// Result<Tuple<Tuple<char, ArgValue>, List<string>>, ErrorCode>
 type MarshallingResult = Result<((char * ArgValue) * string list), ErrorCode>
+// Func<char, List<string>, MarshallingResult>
 type Marshaller = char -> string list -> MarshallingResult
-
-let (|ValidArgument|_|) arg =
-    match List.ofSeq arg with | '-'::c::[] -> Some c | _ -> None
 
 let BoolMarshaller arg tail : MarshallingResult = Success((arg, BoolValue true), tail)
 
 let StringMarshaller arg = function
     | value::tail -> Success((arg, StringValue value), tail)
     | _ -> Failure(MissingString arg)
+
+let (|ValidArgument|_|) arg =
+    match List.ofSeq arg with | '-'::c::[] -> Some c | _ -> None
 
 let StringListMarshaller arg tail : MarshallingResult =
     let rec collectValues acc args =

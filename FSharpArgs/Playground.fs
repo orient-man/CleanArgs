@@ -1,7 +1,8 @@
 ﻿module Playground
 
 // pattern matching + recursion
-let rec sumList = function
+let rec sumList list =
+    match list with
     | [] -> 0
     | n::rest -> n + sumList rest
 
@@ -10,7 +11,6 @@ let rec foldr f x = function
     | [] -> x
     | n::rest -> f n (foldr f x rest)
 
-// using partial application
 let sum = foldr (+) 0
 let product = foldr (*) 1
 let anytrue = foldr (||) false
@@ -20,6 +20,7 @@ let copy list = foldr cons [] list
 let append a b = foldr cons b a
 let count _ n = n + 1
 let length list = foldr count 0 list
+// using partial application
 let double = (*) 2
 let half x = x / 2 
 // gluing functions
