@@ -49,6 +49,8 @@
   </Choose>
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
+    <Compile Include="Playground.fs" />
+    <Compile Include="PlaygroundTests.fs" />
     <Compile Include="Rop.fs" />
     <Compile Include="Args.fs" />
     <Compile Include="ParsingSchemaTests.fs" />
