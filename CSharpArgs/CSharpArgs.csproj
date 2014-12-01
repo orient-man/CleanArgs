@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,6 +44,8 @@
   <ItemGroup>
     <Compile Include="Args.cs" />
     <Compile Include="ArgsException.cs" />
+    <Compile Include="ArgsExceptionTests.cs" />
+    <Compile Include="ArgsTests.cs" />
     <Compile Include="ArgumentMarshaler.cs" />
     <Compile Include="BooleanArgumentMarshaler.cs" />
     <Compile Include="DoubleArgumentMarshaler.cs" />
@@ -51,6 +56,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringArgumentMarshaler.cs" />
     <Compile Include="StringArrayArgumentMarshaler.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
