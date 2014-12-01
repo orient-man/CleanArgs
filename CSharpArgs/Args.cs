@@ -125,10 +125,5 @@ namespace CSharpArgs
         {
             return DoubleArgumentMarshaler.GetValue(marshalers[arg]);
         }
-
-        public String[] GetStringArray(char arg)
-        {
-            return StringArrayArgumentMarshaler.GetValue(marshalers[arg]);
-        }
     }
 }

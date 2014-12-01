@@ -195,31 +195,6 @@ namespace CSharpArgsTests
         }
 
         [Test]
-        public void TestStringArray()
-        {
-            var args = new Args("x[*]", new[] { "-x", "alpha" });
-            Assert.True(args.Has('x'));
-            var result = args.GetStringArray('x');
-            Assert.AreEqual(1, result.Length);
-            Assert.AreEqual("alpha", result[0]);
-        }
-
-        [Test]
-        public void TestMissingStringArrayElement()
-        {
-            try
-            {
-                new Args("x[*]", new[] { "-x" });
-                Assert.Fail();
-            }
-            catch (ArgsException e)
-            {
-                Assert.AreEqual(ErrorCode.MissingString, e.ErrorCode);
-                Assert.AreEqual('x', e.ErrorArgumentId);
-            }
-        }
-
-        [Test]
         public void TestExtraArguments()
         {
             var args = new Args("x,y*", new[] { "-x", "-y", "alpha", "beta" });
