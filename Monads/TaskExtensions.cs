@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
@@ -12,14 +11,10 @@ namespace Monads
         [Test]
         public void CompositionWithLinqMonad()
         {
-            Func<Task<int>> compute5 = () => 5.ToTask();
-            Func<Task<int>> compute7 = () => 7.ToTask();
-            Func<int, int, Task<int>> add = (x, y) => (x + y).ToTask();
-
             var r =
-                from a in compute5()
-                from b in compute7()
-                from c in add(a, b)
+                from a in Compute5()
+                from b in Compute7()
+                from c in Add(a, b)
                 select c * 2;
 
             r.Result.Should().Be(24);
@@ -30,7 +25,7 @@ namespace Monads
             var a = Compute5();
             var b = Compute7();
             var r = await Add(await a, await b) * 2;
-            r.Should().Be(12);
+            r.Should().Be(24);
         }
 
         private static async Task<int> Compute5()
