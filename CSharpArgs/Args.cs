@@ -38,8 +38,6 @@ namespace CSharpArgs
                 marshalers.Add(elementId, new IntegerArgumentMarshaler());
             else if (elementTail == "##")
                 marshalers.Add(elementId, new DoubleArgumentMarshaler());
-            else if (elementTail == "[*]")
-                marshalers.Add(elementId, new StringArrayArgumentMarshaler());
             else
                 throw new ArgsException(
                     ErrorCode.InvalidArgumentFormat,
