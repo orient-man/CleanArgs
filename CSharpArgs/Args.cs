@@ -59,7 +59,7 @@ namespace CSharpArgs
                 var argString = currentArgument.Next();
                 if (argString.StartsWith("-"))
                 {
-                    ParseArgumentCharacters(argString.Substring(1));
+                    ParseElements(argString.Substring(1));
                 }
                 else
                 {
@@ -69,23 +69,23 @@ namespace CSharpArgs
             }
         }
 
-        private void ParseArgumentCharacters(String argChars)
+        private void ParseElements(String argChars)
         {
             for (var i = 0; i < argChars.Length; i++)
-                ParseArgumentCharacter(argChars[i]);
+                ParseElement(argChars[i]);
         }
 
-        private void ParseArgumentCharacter(char argChar)
+        private void ParseElement(char argChar)
         {
-            if (!marshalers.ContainsKey(argChar))
-            {
-                throw new ArgsException(ErrorCode.UnexpectedArgument, argChar, null);
-            }
-            var m = marshalers[argChar];
-            argsFound.Add(argChar);
             try
             {
+                var m = marshalers[argChar];
+                argsFound.Add(argChar);
                 m.Set(currentArgument);
+            }
+            catch (KeyNotFoundException)
+            {
+                throw new ArgsException(ErrorCode.UnexpectedArgument, argChar, null);
             }
             catch (ArgsException e)
             {
