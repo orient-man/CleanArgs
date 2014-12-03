@@ -41,17 +41,15 @@ namespace CSharpArgs2
             string elementTail)
         {
             ValidateSchemaElementId(elementId);
-            try
-            {
-                return Marshalers[elementTail]();
-            }
-            catch (KeyNotFoundException)
-            {
+
+            Func<IArgumentMarshaler> factory;
+            if (!Marshalers.TryGetValue(elementTail, out factory))
                 throw new ArgsException(
                     ErrorCode.InvalidArgumentFormat,
                     elementId,
                     elementTail);
-            }
+
+            return factory();
         }
 
         private static void ValidateSchemaElementId(char elementId)
