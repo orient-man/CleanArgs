@@ -8,18 +8,6 @@ namespace CSharpArgs
         public string ErrorParameter { get; private set; }
         public char ErrorArgumentId { get; set; }
 
-        public ArgsException()
-        {
-            ErrorCode = ErrorCode.Ok;
-            ErrorArgumentId = '\0';
-        }
-
-        public ArgsException(String message) : base(message)
-        {
-            ErrorCode = ErrorCode.Ok;
-            ErrorArgumentId = '\0';
-        }
-
         public ArgsException(ErrorCode errorCode)
         {
             ErrorArgumentId = '\0';
