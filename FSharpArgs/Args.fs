@@ -62,7 +62,7 @@ let StringMarshaller arg = function
 let (|ValidArgument|_|) arg =
     match List.ofSeq arg with | '-'::c::[] -> Some c | _ -> None
 
-// -x a b c -y -> [a; b; c]
+// -x [a; b; c; -y] -y -> [a; b; c], -y
 let StringListMarshaller arg tail : MarshallingResult =
     let rec collectValues acc args =
         match args with
