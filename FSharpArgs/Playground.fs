@@ -1,13 +1,14 @@
 ﻿module Playground
 
-// pattern matching + recursion
+// recursion + no state + pattern matching
 let rec sumList list =
     match list with
     | [] -> 0
     | n::rest -> n + sumList rest
 
 // generalized function
-let rec foldr f x = function
+let rec foldr f x list =
+    match list with
     | [] -> x
     | n::rest -> f n (foldr f x rest)
 

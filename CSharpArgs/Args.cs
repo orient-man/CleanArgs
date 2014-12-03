@@ -63,7 +63,7 @@ namespace CSharpArgs
 
         private void ParseArguments()
         {
-            for (currentArgument = new Iterator<string>(args);currentArgument.HasNext();)
+            for (currentArgument = new Iterator<string>(args); currentArgument.HasNext();)
             {
                 var arg = currentArgument.Next();
                 ParseArgument(arg);
