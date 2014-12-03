@@ -7,8 +7,8 @@ namespace CSharpArgs
     {
         private readonly string schema;
         private readonly string[] args;
-        private Dictionary<Char, IArgumentMarshaler> marshalers;
-        private HashSet<Char> argsFound;
+        private Dictionary<char, IArgumentMarshaler> marshalers;
+        private HashSet<char> argsFound;
         private Iterator<string> currentArgument;
 
         public Args(string schema, string[] args)
@@ -22,7 +22,7 @@ namespace CSharpArgs
         private void Parse()
         {
             marshalers = new Dictionary<char, IArgumentMarshaler>();
-            argsFound = new HashSet<Char>();
+            argsFound = new HashSet<char>();
 
             ParseSchema();
             ParseArguments();
@@ -57,7 +57,7 @@ namespace CSharpArgs
 
         private static void ValidateSchemaElementId(char elementId)
         {
-            if (!Char.IsLetter(elementId))
+            if (!char.IsLetter(elementId))
                 throw new ArgsException(ErrorCode.InvalidArgumentName, elementId, null);
         }
 
