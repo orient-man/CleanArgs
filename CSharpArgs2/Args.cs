@@ -102,33 +102,13 @@ namespace CSharpArgs2
             return values.Count;
         }
 
-        public string GetString(char arg)
-        {
-            return GetValue(arg, "");
-        }
-
-        public int GetInt(char arg)
-        {
-            return GetValue(arg, 0);
-        }
-
-        public bool GetBoolean(char arg)
-        {
-            return GetValue(arg, false);
-        }
-
-        public double GetDouble(char arg)
-        {
-            return GetValue(arg, 0.0);
-        }
-
-        private T GetValue<T>(char arg, T defaultValue)
+        public T Get<T>(char arg, T defaultValue = default(T))
         {
             object value;
             if (!values.TryGetValue(arg, out value))
                 return defaultValue;
 
-            return value == null ? defaultValue : (T)value;
+            return value is T ? (T)value : defaultValue;
         }
 
         public bool Has(char arg)

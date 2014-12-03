@@ -76,7 +76,7 @@ namespace CSharpArgs2
         public void SimpleBooleanPresent()
         {
             var args = new Args("x", new[] { "-x" });
-            Assert.AreEqual(true, args.GetBoolean('x'));
+            Assert.AreEqual(true, args.Get<bool>('x'));
             Assert.AreEqual(1, args.Cardinality());
         }
 
@@ -84,7 +84,7 @@ namespace CSharpArgs2
         public void WhenArgumentNotPresentGetBooleanReturnsFalse()
         {
             var args = new Args("x#", new[] { "-x", "42" });
-            Assert.AreEqual(false, args.GetBoolean('y'));
+            Assert.AreEqual(false, args.Get<bool>('y'));
             Assert.AreEqual(1, args.Cardinality());
         }
 
@@ -92,7 +92,7 @@ namespace CSharpArgs2
         public void WhenArgumentNotPresentGetIntReturnsZero()
         {
             var args = new Args("x", new[] { "-x" });
-            Assert.AreEqual(0, args.GetInt('y'));
+            Assert.AreEqual(0, args.Get<int>('y'));
             Assert.AreEqual(1, args.Cardinality());
         }
 
@@ -100,7 +100,7 @@ namespace CSharpArgs2
         public void WhenArgumentNotPresentGetStringReturnEmptyString()
         {
             var args = new Args("x", new[] { "-x" });
-            Assert.AreEqual("", args.GetString('y'));
+            Assert.AreEqual("", args.Get<string>('y') ?? "");
             Assert.AreEqual(1, args.Cardinality());
         }
 
@@ -109,7 +109,7 @@ namespace CSharpArgs2
         {
             var args = new Args("x*", new[] { "-x", "param" });
             Assert.True(args.Has('x'));
-            Assert.AreEqual("param", args.GetString('x'));
+            Assert.AreEqual("param", args.Get<string>('x'));
             Assert.AreEqual(1, args.Cardinality());
         }
 
@@ -142,7 +142,7 @@ namespace CSharpArgs2
         {
             var args = new Args("x#", new[] { "-x", "42" });
             Assert.True(args.Has('x'));
-            Assert.AreEqual(42, args.GetInt('x'));
+            Assert.AreEqual(42, args.Get<int>('x'));
             Assert.AreEqual(1, args.Cardinality());
         }
 
@@ -181,7 +181,7 @@ namespace CSharpArgs2
         {
             var args = new Args("x##", new[] { "-x", "42.13" });
             Assert.True(args.Has('x'));
-            Assert.AreEqual(42.13, args.GetDouble('x'));
+            Assert.AreEqual(42.13, args.Get<double>('x'));
             Assert.AreEqual(1, args.Cardinality());
         }
 
@@ -219,8 +219,8 @@ namespace CSharpArgs2
         public void ExtraArguments()
         {
             var args = new Args("x,y*", new[] { "-x", "-y", "alpha", "beta" });
-            Assert.True(args.GetBoolean('x'));
-            Assert.AreEqual("alpha", args.GetString('y'));
+            Assert.True(args.Get<bool>('x'));
+            Assert.AreEqual("alpha", args.Get<string>('y'));
             Assert.AreEqual(2, args.Cardinality());
         }
     }
