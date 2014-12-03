@@ -216,11 +216,22 @@ namespace CSharpArgs2
         }
 
         [Test]
-        public void ExtraArguments()
+        public void TestExtraArgumentsOnTheEnd()
         {
             var args = new Args("x,y*", new[] { "-x", "-y", "alpha", "beta" });
             Assert.True(args.Get<bool>('x'));
             Assert.AreEqual("alpha", args.Get<string>('y'));
+            Assert.AreEqual(2, args.Cardinality());
+        }
+
+        [Test]
+        public void TestExtraArgumentsThatLookLikeFlags()
+        {
+            var args = new Args("x,y", new[] { "-x", "alpha", "-y", "beta" });
+            Assert.True(args.Has('x'));
+            Assert.True(args.Has('y'));
+            Assert.True(args.Get<bool>('x'));
+            Assert.True(args.Get<bool>('y'));
             Assert.AreEqual(2, args.Cardinality());
         }
     }

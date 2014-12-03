@@ -5,27 +5,37 @@ namespace CSharpArgs
 {
     public class Args
     {
-        private readonly Dictionary<Char, IArgumentMarshaler> marshalers;
-        private readonly HashSet<Char> argsFound;
-        private Iterator<String> currentArgument;
+        private readonly string schema;
+        private readonly string[] args;
+        private Dictionary<Char, IArgumentMarshaler> marshalers;
+        private HashSet<Char> argsFound;
+        private Iterator<string> currentArgument;
 
-        public Args(String schema, String[] args)
+        public Args(string schema, string[] args)
+        {
+            this.schema = schema;
+            this.args = args;
+
+            Parse();
+        }
+
+        private void Parse()
         {
             marshalers = new Dictionary<char, IArgumentMarshaler>();
             argsFound = new HashSet<Char>();
 
-            ParseSchema(schema);
-            ParseArgumentStrings(args);
+            ParseSchema();
+            ParseArguments();
         }
 
-        private void ParseSchema(String schema)
+        private void ParseSchema()
         {
             foreach (var element in schema.Split(','))
                 if (element.Length > 0)
                     ParseSchemaElement(element.Trim());
         }
 
-        private void ParseSchemaElement(String element)
+        private void ParseSchemaElement(string element)
         {
             var elementId = element[0];
             var elementTail = element.Substring(1);
@@ -51,28 +61,25 @@ namespace CSharpArgs
                 throw new ArgsException(ErrorCode.InvalidArgumentName, elementId, null);
         }
 
-        private void ParseArgumentStrings(String[] argsList)
+        private void ParseArguments()
         {
-            currentArgument = new Iterator<string>(argsList);
-            while (currentArgument.HasNext())
+            for (currentArgument = new Iterator<string>(args);currentArgument.HasNext();)
             {
-                var argString = currentArgument.Next();
-                if (argString.StartsWith("-"))
-                {
-                    ParseElements(argString.Substring(1));
-                }
-                else
-                {
-                    currentArgument.Previous();
-                    break;
-                }
+                var arg = currentArgument.Next();
+                ParseArgument(arg);
             }
         }
 
-        private void ParseElements(String argChars)
+        private void ParseArgument(string arg)
         {
-            for (var i = 0; i < argChars.Length; i++)
-                ParseElement(argChars[i]);
+            if (arg.StartsWith("-"))
+                ParseElements(arg);
+        }
+
+        private void ParseElements(string arg)
+        {
+            for (var i = 1; i < arg.Length; i++)
+                ParseElement(arg[i]);
         }
 
         private void ParseElement(char argChar)
@@ -94,14 +101,14 @@ namespace CSharpArgs
             }
         }
 
+        public int Cardinality()
+        {
+            return argsFound.Count;
+        }
+
         public bool Has(char arg)
         {
             return argsFound.Contains(arg);
-        }
-
-        public int NextArgument()
-        {
-            return currentArgument.NextIndex();
         }
 
         public bool GetBoolean(char arg)
@@ -109,7 +116,7 @@ namespace CSharpArgs
             return BooleanArgumentMarshaler.GetValue(marshalers[arg]);
         }
 
-        public String GetString(char arg)
+        public string GetString(char arg)
         {
             return StringArgumentMarshaler.GetValue(marshalers[arg]);
         }

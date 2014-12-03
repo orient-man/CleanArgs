@@ -10,7 +10,7 @@ namespace CSharpArgs
         public void TestCreateWithNoSchemaOrArguments()
         {
             var args = new Args("", new String[0]);
-            Assert.AreEqual(0, args.NextArgument());
+            Assert.AreEqual(0, args.Cardinality());
         }
 
         [Test]
@@ -78,7 +78,7 @@ namespace CSharpArgs
         {
             var args = new Args("x", new[] { "-x" });
             Assert.AreEqual(true, args.GetBoolean('x'));
-            Assert.AreEqual(1, args.NextArgument());
+            Assert.AreEqual(1, args.Cardinality());
         }
 
         [Test]
@@ -87,7 +87,7 @@ namespace CSharpArgs
             var args = new Args("x*", new[] { "-x", "param" });
             Assert.True(args.Has('x'));
             Assert.AreEqual("param", args.GetString('x'));
-            Assert.AreEqual(2, args.NextArgument());
+            Assert.AreEqual(1, args.Cardinality());
         }
 
         [Test]
@@ -111,7 +111,7 @@ namespace CSharpArgs
             var args = new Args("x, y", new[] { "-xy" });
             Assert.True(args.Has('x'));
             Assert.True(args.Has('y'));
-            Assert.AreEqual(1, args.NextArgument());
+            Assert.AreEqual(2, args.Cardinality());
         }
 
         [Test]
@@ -120,7 +120,7 @@ namespace CSharpArgs
             var args = new Args("x#", new[] { "-x", "42" });
             Assert.True(args.Has('x'));
             Assert.AreEqual(42, args.GetInt('x'));
-            Assert.AreEqual(2, args.NextArgument());
+            Assert.AreEqual(1, args.Cardinality());
         }
 
         [Test]
@@ -194,23 +194,23 @@ namespace CSharpArgs
         }
 
         [Test]
-        public void TestExtraArguments()
+        public void TestExtraArgumentsOnTheEnd()
         {
             var args = new Args("x,y*", new[] { "-x", "-y", "alpha", "beta" });
             Assert.True(args.GetBoolean('x'));
             Assert.AreEqual("alpha", args.GetString('y'));
-            Assert.AreEqual(3, args.NextArgument());
+            Assert.AreEqual(2, args.Cardinality());
         }
 
         [Test]
-        public void TestExtraArgumentsThatLookLikeFlags()
+        public void TestExtraArgumentsInTheMiddle()
         {
             var args = new Args("x,y", new[] { "-x", "alpha", "-y", "beta" });
             Assert.True(args.Has('x'));
-            Assert.False(args.Has('y'));
+            Assert.True(args.Has('y'));
             Assert.True(args.GetBoolean('x'));
-            Assert.False(args.GetBoolean('y'));
-            Assert.AreEqual(1, args.NextArgument());
+            Assert.True(args.GetBoolean('y'));
+            Assert.AreEqual(2, args.Cardinality());
         }
     }
 }
