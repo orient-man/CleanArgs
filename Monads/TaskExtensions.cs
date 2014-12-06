@@ -55,7 +55,7 @@ namespace Monads
             this Task<A> a,
             Func<A, Task<B>> func)
         {
-            return a.ContinueWith(aval => func(aval.Result)).Unwrap();
+            return a.ContinueWith(prev => func(prev.Result)).Unwrap();
         }
 
         public static Task<C> SelectMany<A, B, C>(
