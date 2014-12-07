@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace CSharpArgs
 {
@@ -6,7 +7,7 @@ namespace CSharpArgs
     {
         private int intValue;
 
-        public void Set(Iterator<string> currentArgument)
+        public void Set(IEnumerator<string> currentArgument)
         {
             String parameter = null;
             try
@@ -14,7 +15,7 @@ namespace CSharpArgs
                 parameter = currentArgument.Next();
                 intValue = Int32.Parse(parameter);
             }
-            catch (NoSuchElementException)
+            catch (InvalidOperationException)
             {
                 throw new ArgsException(ErrorCode.MissingInteger);
             }

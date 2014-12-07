@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace CSharpArgs
 {
     public class Args
     {
         private readonly string schema;
-        private readonly string[] args;
+        private readonly IEnumerable<string> args;
         private Dictionary<char, IArgumentMarshaler> marshalers;
         private HashSet<char> argsFound;
-        private Iterator<string> currentArgument;
+        private IEnumerator<string> currentArgument;
 
-        public Args(string schema, string[] args)
+        public Args(string schema, IEnumerable<string> args)
         {
             this.schema = schema;
             this.args = args;
@@ -63,9 +62,10 @@ namespace CSharpArgs
 
         private void ParseArguments()
         {
-            for (currentArgument = new Iterator<string>(args); currentArgument.HasNext();)
+            currentArgument = args.GetEnumerator();
+            while (currentArgument.MoveNext())
             {
-                var arg = currentArgument.Next();
+                var arg = currentArgument.Current;
                 ParseArgument(arg);
             }
         }

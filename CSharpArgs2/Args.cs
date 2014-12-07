@@ -20,7 +20,7 @@ namespace CSharpArgs2
 
         public Args(string schema, IEnumerable<string> args)
         {
-            values = ParseArguments(args.GetEnumerator(), ParseSchema(schema));
+            values = ParseArguments(args, ParseSchema(schema));
         }
 
         private static IReadOnlyDictionary<char, IArgumentMarshaler> ParseSchema(
@@ -59,10 +59,11 @@ namespace CSharpArgs2
         }
 
         private static IReadOnlyDictionary<char, object> ParseArguments(
-            IEnumerator<string> currentArgument,
+            IEnumerable<string> args,
             IReadOnlyDictionary<char, IArgumentMarshaler> marshalers)
         {
             var values = new Dictionary<char, object>();
+            var currentArgument = args.GetEnumerator();
             while (currentArgument.MoveNext())
                 foreach (var arg in FindElements(currentArgument.Current))
                     values[arg] = ParseArgument(arg, currentArgument, marshalers);

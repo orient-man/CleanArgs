@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace CSharpArgs
@@ -7,7 +8,7 @@ namespace CSharpArgs
     {
         private double doubleValue;
 
-        public void Set(Iterator<string> currentArgument)
+        public void Set(IEnumerator<string> currentArgument)
         {
             String parameter = null;
             try
@@ -15,7 +16,7 @@ namespace CSharpArgs
                 parameter = currentArgument.Next();
                 doubleValue = Double.Parse(parameter, CultureInfo.InvariantCulture.NumberFormat);
             }
-            catch (NoSuchElementException)
+            catch (InvalidOperationException)
             {
                 throw new ArgsException(ErrorCode.MissingDouble);
             }

@@ -1,10 +1,12 @@
-﻿namespace CSharpArgs
+﻿using System.Collections.Generic;
+
+namespace CSharpArgs
 {
     public class BooleanArgumentMarshaler : IArgumentMarshaler
     {
         private bool booleanValue;
 
-        public void Set(Iterator<string> currentArgument)
+        public void Set(IEnumerator<string> currentArgument)
         {
             booleanValue = true;
         }

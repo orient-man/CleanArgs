@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace CSharpArgs
 {
@@ -6,13 +7,13 @@ namespace CSharpArgs
     {
         private String stringValue = "";
 
-        public void Set(Iterator<String> currentArgument)
+        public void Set(IEnumerator<String> currentArgument)
         {
             try
             {
                 stringValue = currentArgument.Next();
             }
-            catch (NoSuchElementException)
+            catch (InvalidOperationException)
             {
                 throw new ArgsException(ErrorCode.MissingString);
             }
