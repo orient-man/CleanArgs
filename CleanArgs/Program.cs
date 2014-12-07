@@ -21,7 +21,7 @@ namespace CleanArgs
             }
         }
 
-        private static void ExecuteApplication(bool logging, int port, String directory)
+        private static void ExecuteApplication(bool logging, int port, string directory)
         {
             Console.WriteLine(
                 "logging is {0}, port:{1}, directory:{2}",

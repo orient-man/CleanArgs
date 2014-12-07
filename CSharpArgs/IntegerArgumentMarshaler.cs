@@ -9,7 +9,7 @@ namespace CSharpArgs
 
         public void Set(IEnumerator<string> currentArgument)
         {
-            String parameter = null;
+            string parameter = null;
             try
             {
                 parameter = currentArgument.Next();

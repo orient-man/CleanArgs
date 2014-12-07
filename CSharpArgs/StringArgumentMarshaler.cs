@@ -5,9 +5,9 @@ namespace CSharpArgs
 {
     public class StringArgumentMarshaler : IArgumentMarshaler
     {
-        private String stringValue = "";
+        private string stringValue = "";
 
-        public void Set(IEnumerator<String> currentArgument)
+        public void Set(IEnumerator<string> currentArgument)
         {
             try
             {
@@ -19,7 +19,7 @@ namespace CSharpArgs
             }
         }
 
-        public static String GetValue(IArgumentMarshaler am)
+        public static string GetValue(IArgumentMarshaler am)
         {
             var marshaler = am as StringArgumentMarshaler;
             return marshaler != null ? marshaler.stringValue : "";

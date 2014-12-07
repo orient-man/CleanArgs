@@ -52,11 +52,11 @@ namespace CSharpArgs2
                         "Could not find double parameter for -{0}.",
                         ErrorArgumentId);
                 case ErrorCode.InvalidArgumentName:
-                    return String.Format(
+                    return string.Format(
                         "'{0}' is not a valid argument name.",
                         ErrorArgumentId);
                 case ErrorCode.InvalidArgumentFormat:
-                    return String.Format(
+                    return string.Format(
                         "'{0}' is not a valid argument format.",
                         errorParameter);
             }

@@ -1,5 +1,4 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace CSharpArgs
 {
@@ -9,7 +8,7 @@ namespace CSharpArgs
         [Test]
         public void TestCreateWithNoSchemaOrArguments()
         {
-            var args = new Args("", new String[0]);
+            var args = new Args("", new string[0]);
             Assert.AreEqual(0, args.Cardinality());
         }
 
@@ -48,7 +47,7 @@ namespace CSharpArgs
         {
             try
             {
-                new Args("*", new String[] { });
+                new Args("*", new string[] { });
                 Assert.Fail("Args constructor should have thrown exception");
             }
             catch (ArgsException e)
@@ -63,7 +62,7 @@ namespace CSharpArgs
         {
             try
             {
-                new Args("f~", new String[] { });
+                new Args("f~", new string[] { });
                 Assert.Fail("Args constructor should have throws exception");
             }
             catch (ArgsException e)

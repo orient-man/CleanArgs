@@ -14,56 +14,56 @@ namespace CSharpArgs
             ErrorCode = errorCode;
         }
 
-        public ArgsException(ErrorCode errorCode, String errorParameter)
+        public ArgsException(ErrorCode errorCode, string errorParameter)
         {
             ErrorArgumentId = '\0';
             ErrorCode = errorCode;
             ErrorParameter = errorParameter;
         }
 
-        public ArgsException(ErrorCode errorCode, char errorArgumentId, String errorParameter)
+        public ArgsException(ErrorCode errorCode, char errorArgumentId, string errorParameter)
         {
             ErrorCode = errorCode;
             ErrorParameter = errorParameter;
             ErrorArgumentId = errorArgumentId;
         }
 
-        public String GetErrorMessage()
+        public string GetErrorMessage()
         {
             switch (ErrorCode)
             {
                 case ErrorCode.Ok:
                     return "TILT: Should not get here.";
                 case ErrorCode.UnexpectedArgument:
-                    return String.Format("Argument -{0} unexpected.", ErrorArgumentId);
+                    return string.Format("Argument -{0} unexpected.", ErrorArgumentId);
                 case ErrorCode.MissingString:
-                    return String.Format(
+                    return string.Format(
                         "Could not find string parameter for -{0}.",
                         ErrorArgumentId);
                 case ErrorCode.InvalidInteger:
-                    return String.Format(
+                    return string.Format(
                         "Argument -{0} expects an integer but was '{1}'.",
                         ErrorArgumentId,
                         ErrorParameter);
                 case ErrorCode.MissingInteger:
-                    return String.Format(
+                    return string.Format(
                         "Could not find integer parameter for -{0}.",
                         ErrorArgumentId);
                 case ErrorCode.InvalidDouble:
-                    return String.Format(
+                    return string.Format(
                         "Argument -{0} expects a double but was '{1}'.",
                         ErrorArgumentId,
                         ErrorParameter);
                 case ErrorCode.MissingDouble:
-                    return String.Format(
+                    return string.Format(
                         "Could not find double parameter for -{0}.",
                         ErrorArgumentId);
                 case ErrorCode.InvalidArgumentName:
-                    return String.Format(
+                    return string.Format(
                         "'{0}' is not a valid argument name.",
                         ErrorArgumentId);
                 case ErrorCode.InvalidArgumentFormat:
-                    return String.Format(
+                    return string.Format(
                         "'{0}' is not a valid argument format.",
                         ErrorParameter);
             }
