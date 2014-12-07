@@ -7,20 +7,18 @@ namespace CSharpArgs2
     {
         public object Marshal(IEnumerator<string> currentArgument)
         {
-            string parameter = null;
+            if (!currentArgument.MoveNext())
+                throw new ArgsException(ErrorCode.MissingInteger);
 
             try
             {
-                parameter = currentArgument.Next();
-                return Int32.Parse(parameter);
-            }
-            catch (InvalidOperationException)
-            {
-                throw new ArgsException(ErrorCode.MissingInteger);
+                return Int32.Parse(currentArgument.Current);
             }
             catch (FormatException)
             {
-                throw new ArgsException(ErrorCode.InvalidInteger, errorParameter: parameter);
+                throw new ArgsException(
+                    ErrorCode.InvalidInteger,
+                    errorParameter: currentArgument.Current);
             }
         }
     }

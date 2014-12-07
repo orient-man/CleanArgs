@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace CSharpArgs
 {
@@ -9,14 +8,10 @@ namespace CSharpArgs
 
         public void Set(IEnumerator<string> currentArgument)
         {
-            try
-            {
-                stringValue = currentArgument.Next();
-            }
-            catch (InvalidOperationException)
-            {
+            if (!currentArgument.MoveNext())
                 throw new ArgsException(ErrorCode.MissingString);
-            }
+
+            stringValue = currentArgument.Current;
         }
 
         public static string GetValue(IArgumentMarshaler am)

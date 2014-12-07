@@ -10,19 +10,19 @@ namespace CSharpArgs
 
         public void Set(IEnumerator<string> currentArgument)
         {
-            string parameter = null;
+            if (!currentArgument.MoveNext())
+                throw new ArgsException(ErrorCode.MissingDouble);
             try
             {
-                parameter = currentArgument.Next();
-                doubleValue = Double.Parse(parameter, CultureInfo.InvariantCulture.NumberFormat);
-            }
-            catch (InvalidOperationException)
-            {
-                throw new ArgsException(ErrorCode.MissingDouble);
+                doubleValue = Double.Parse(
+                    currentArgument.Current,
+                    CultureInfo.InvariantCulture.NumberFormat);
             }
             catch (FormatException)
             {
-                throw new ArgsException(ErrorCode.InvalidDouble, parameter);
+                throw new ArgsException(
+                    ErrorCode.InvalidDouble,
+                    currentArgument.Current);
             }
         }
 

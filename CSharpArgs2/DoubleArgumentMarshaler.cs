@@ -8,20 +8,20 @@ namespace CSharpArgs2
     {
         public object Marshal(IEnumerator<string> currentArgument)
         {
-            string parameter = null;
+            if (!currentArgument.MoveNext())
+                throw new ArgsException(ErrorCode.MissingDouble);
 
             try
             {
-                parameter = currentArgument.Next();
-                return double.Parse(parameter, CultureInfo.InvariantCulture);
-            }
-            catch (InvalidOperationException)
-            {
-                throw new ArgsException(ErrorCode.MissingDouble);
+                return double.Parse(
+                    currentArgument.Current,
+                    CultureInfo.InvariantCulture);
             }
             catch (FormatException)
             {
-                throw new ArgsException(ErrorCode.InvalidDouble, errorParameter: parameter);
+                throw new ArgsException(
+                    ErrorCode.InvalidDouble,
+                    errorParameter: currentArgument.Current);
             }
         }
     }

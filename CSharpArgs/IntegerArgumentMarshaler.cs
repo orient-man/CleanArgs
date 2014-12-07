@@ -9,19 +9,18 @@ namespace CSharpArgs
 
         public void Set(IEnumerator<string> currentArgument)
         {
-            string parameter = null;
+            if (!currentArgument.MoveNext())
+                throw new ArgsException(ErrorCode.MissingInteger);
+
             try
             {
-                parameter = currentArgument.Next();
-                intValue = Int32.Parse(parameter);
-            }
-            catch (InvalidOperationException)
-            {
-                throw new ArgsException(ErrorCode.MissingInteger);
+                intValue = Int32.Parse(currentArgument.Current);
             }
             catch (FormatException)
             {
-                throw new ArgsException(ErrorCode.InvalidInteger, parameter);
+                throw new ArgsException(
+                    ErrorCode.InvalidInteger,
+                    currentArgument.Current);
             }
         }
 

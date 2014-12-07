@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace CSharpArgs2
@@ -7,14 +6,10 @@ namespace CSharpArgs2
     {
         public object Marshal(IEnumerator<string> currentArgument)
         {
-            try
-            {
-                return currentArgument.Next();
-            }
-            catch (InvalidOperationException)
-            {
+            if (!currentArgument.MoveNext())
                 throw new ArgsException(ErrorCode.MissingString);
-            }
+
+            return currentArgument.Current;
         }
     }
 }
