@@ -27,6 +27,7 @@ namespace CSharpArgs
             ParseArguments();
         }
 
+        // example schema: "l,p#,d*"
         private void ParseSchema()
         {
             foreach (var element in schema.Split(','))
@@ -60,6 +61,7 @@ namespace CSharpArgs
                 throw new ArgsException(ErrorCode.InvalidArgumentName, elementId, null);
         }
 
+        // example arguments: -l -p 4444 -d "C:\Windows\Temp"
         private void ParseArguments()
         {
             currentArgument = args.GetEnumerator();
