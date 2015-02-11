@@ -58,11 +58,11 @@ namespace CSharpArgs2
                 throw new ArgsException(ErrorCode.InvalidArgumentName, elementId);
         }
 
-        private static IReadOnlyDictionary<char, object> ParseArguments(
+        private static IReadOnlyDictionary<char, dynamic> ParseArguments(
             IEnumerable<string> args,
             IReadOnlyDictionary<char, IArgumentMarshaler> marshalers)
         {
-            var values = new Dictionary<char, object>();
+            var values = new Dictionary<char, dynamic>();
             var currentArgument = args.GetEnumerator();
             while (currentArgument.MoveNext())
                 foreach (var arg in FindElements(currentArgument.Current))
@@ -76,7 +76,7 @@ namespace CSharpArgs2
             return arg.StartsWith("-") ? arg.Skip(1) : Enumerable.Empty<char>();
         }
 
-        private static object ParseArgument(
+        private static dynamic ParseArgument(
             char arg,
             IEnumerator<string> currentArgument,
             IReadOnlyDictionary<char, IArgumentMarshaler> marshalers)
