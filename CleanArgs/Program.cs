@@ -5,6 +5,7 @@ namespace CleanArgs
 {
     public static class Program
     {
+        // Example usage: Args.exe -l -p 4444 -d "C:\Windows\Temp"
         private static void Main(string[] args)
         {
             try

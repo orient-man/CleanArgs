@@ -16,7 +16,7 @@ namespace CSharpArgs2
                     { "##", () => new DoubleArgumentMarshaler() }
                 };
 
-        private readonly IReadOnlyDictionary<char, object> values;
+        private readonly IReadOnlyDictionary<char, dynamic> values;
 
         public Args(string schema, IEnumerable<string> args)
         {
@@ -103,7 +103,7 @@ namespace CSharpArgs2
 
         public T Get<T>(char arg, T defaultValue = default(T))
         {
-            object value;
+            dynamic value;
             if (!values.TryGetValue(arg, out value))
                 return defaultValue;
 

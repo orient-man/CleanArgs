@@ -4,7 +4,7 @@ namespace CSharpArgs2
 {
     public class BoolArgumentMarshaler : IArgumentMarshaler
     {
-        public object Marshal(IEnumerator<string> currentArgument)
+        public dynamic Marshal(IEnumerator<string> currentArgument)
         {
             return true;
         }

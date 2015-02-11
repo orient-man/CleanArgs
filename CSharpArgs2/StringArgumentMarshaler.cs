@@ -4,7 +4,7 @@ namespace CSharpArgs2
 {
     public class StringArgumentMarshaler : IArgumentMarshaler
     {
-        public object Marshal(IEnumerator<string> currentArgument)
+        public dynamic Marshal(IEnumerator<string> currentArgument)
         {
             if (!currentArgument.MoveNext())
                 throw new ArgsException(ErrorCode.MissingString);
