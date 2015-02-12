@@ -19,12 +19,12 @@ type SchemaInfo = Map<char, SchemaElement>
 type SchemaParsingResult = Result<SchemaInfo, ErrorCode>
 
 let parseElement = function
-    | (arg, _) when not(Char.IsLetter arg) -> Failure(InvalidArgumentName arg)
-    | (arg, "") -> Success(arg, Bool)
-    | (arg, "*") -> Success(arg, String)
-    | (arg, "[*]") -> Success(arg, StringList)
-    | (arg, "#") -> Success(arg, Int)
-    | (arg, "##") -> Success(arg, Double)
+    | arg, _ when not(Char.IsLetter arg) -> Failure(InvalidArgumentName arg)
+    | arg, "" -> Success(arg, Bool)
+    | arg, "*" -> Success(arg, String)
+    | arg, "[*]" -> Success(arg, StringList)
+    | arg, "#" -> Success(arg, Int)
+    | arg, "##" -> Success(arg, Double)
     | elem -> Failure(InvalidArgumentFormat elem)
 
 let rec parseSchemaElements acc = function
@@ -36,7 +36,7 @@ let parseSchema (schema : string) : SchemaParsingResult =
     |> Seq.ofArray
     |> Seq.map (fun s -> s.Trim())
     |> Seq.filter (fun s -> s.Length > 0)
-    |> Seq.map (fun s -> (s.[0], s.Substring(1)))
+    |> Seq.map (fun s -> s.[0], s.Substring(1))
     |> List.ofSeq
     |> parseSchemaElements []
     |> map Map.ofList
@@ -66,8 +66,8 @@ let (|ValidArgument|_|) arg =
 let StringListMarshaller arg tail : MarshallingResult =
     let rec collectValues acc args =
         match args with
-        | [] -> (acc, [])
-        | ValidArgument _::_ -> (acc, args)
+        | [] -> acc, []
+        | ValidArgument _::_ -> acc, args
         | value::tail -> collectValues (value::acc) tail
     let value, tail = collectValues [] tail
     Success((arg, StringListValue (List.rev value)), tail)
@@ -75,14 +75,14 @@ let StringListMarshaller arg tail : MarshallingResult =
 let IntMarshaller arg = function
     | value::tail ->
         match Int32.TryParse value with
-        | (true, value) -> Success((arg, IntValue value), tail)
+        | true, value -> Success((arg, IntValue value), tail)
         | _ -> Failure(InvalidInt(arg, value))
     | _ -> Failure(MissingInt arg)
 
 let DoubleMarshaller arg = function
     | value::tail ->
         match Double.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture) with
-        | (true, value) -> Success((arg, DoubleValue value), tail)
+        | true, value -> Success((arg, DoubleValue value), tail)
         | _ -> Failure(InvalidDouble(arg, value))
     | _ -> Failure(MissingDouble arg)
 
