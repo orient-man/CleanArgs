@@ -1,19 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace CSharpArgs2
 {
     public class Args
     {
-        private static readonly IReadOnlyDictionary<string, Func<IArgumentMarshaler>>
+        private delegate dynamic Marshaler(IEnumerator<string> currentArgument);
+
+        private static readonly IReadOnlyDictionary<string, Marshaler>
             Marshalers =
-                new Dictionary<string, Func<IArgumentMarshaler>>
+                new Dictionary<string, Marshaler>
                 {
-                    { "", () => new BoolArgumentMarshaler() },
-                    { "*", () => new StringArgumentMarshaler() },
-                    { "#", () => new IntArgumentMarshaler() },
-                    { "##", () => new DoubleArgumentMarshaler() }
+                    { "", BoolArgumentMarshaler.Marshal },
+                    { "*", StringArgumentMarshaler.Marshal },
+                    { "#", IntArgumentMarshaler.Marshal },
+                    { "##", DoubleArgumentMarshaler.Marshal }
                 };
 
         private readonly IReadOnlyDictionary<char, dynamic> values;
@@ -23,8 +24,7 @@ namespace CSharpArgs2
             values = ParseArguments(args, ParseSchema(schema));
         }
 
-        private static IReadOnlyDictionary<char, IArgumentMarshaler> ParseSchema(
-            string schema)
+        private static IReadOnlyDictionary<char, Marshaler> ParseSchema(string schema)
         {
             return schema
                 .Split(',')
@@ -36,20 +36,20 @@ namespace CSharpArgs2
                     o => ParseSchemaElement(o.ElementId, o.ElementTail));
         }
 
-        private static IArgumentMarshaler ParseSchemaElement(
+        private static Marshaler ParseSchemaElement(
             char elementId,
             string elementTail)
         {
             ValidateSchemaElementId(elementId);
 
-            Func<IArgumentMarshaler> factory;
-            if (!Marshalers.TryGetValue(elementTail, out factory))
+            Marshaler marshaler;
+            if (!Marshalers.TryGetValue(elementTail, out marshaler))
                 throw new ArgsException(
                     ErrorCode.InvalidArgumentFormat,
                     elementId,
                     elementTail);
 
-            return factory();
+            return marshaler;
         }
 
         private static void ValidateSchemaElementId(char elementId)
@@ -60,7 +60,7 @@ namespace CSharpArgs2
 
         private static IReadOnlyDictionary<char, dynamic> ParseArguments(
             IEnumerable<string> args,
-            IReadOnlyDictionary<char, IArgumentMarshaler> marshalers)
+            IReadOnlyDictionary<char, Marshaler> marshalers)
         {
             var values = new Dictionary<char, dynamic>();
             var currentArgument = args.GetEnumerator();
@@ -79,11 +79,11 @@ namespace CSharpArgs2
         private static dynamic ParseArgument(
             char arg,
             IEnumerator<string> currentArgument,
-            IReadOnlyDictionary<char, IArgumentMarshaler> marshalers)
+            IReadOnlyDictionary<char, Marshaler> marshalers)
         {
             try
             {
-                return marshalers[arg].Marshal(currentArgument);
+                return marshalers[arg](currentArgument);
             }
             catch (KeyNotFoundException)
             {

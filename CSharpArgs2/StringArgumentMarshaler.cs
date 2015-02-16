@@ -2,9 +2,9 @@ using System.Collections.Generic;
 
 namespace CSharpArgs2
 {
-    public class StringArgumentMarshaler : IArgumentMarshaler
+    public static class StringArgumentMarshaler
     {
-        public dynamic Marshal(IEnumerator<string> currentArgument)
+        public static dynamic Marshal(IEnumerator<string> currentArgument)
         {
             if (!currentArgument.MoveNext())
                 throw new ArgsException(ErrorCode.MissingString);

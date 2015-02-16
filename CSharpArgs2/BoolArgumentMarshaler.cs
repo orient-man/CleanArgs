@@ -2,9 +2,9 @@
 
 namespace CSharpArgs2
 {
-    public class BoolArgumentMarshaler : IArgumentMarshaler
+    public static class BoolArgumentMarshaler
     {
-        public dynamic Marshal(IEnumerator<string> currentArgument)
+        public static dynamic Marshal(IEnumerator<string> currentArgument)
         {
             return true;
         }
