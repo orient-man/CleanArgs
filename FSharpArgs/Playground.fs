@@ -7,10 +7,10 @@ let rec sumList list =
     | n::rest -> n + sumList rest
 
 // generalized function
-let rec foldr f x list =
+let rec foldr f seed list =
     match list with
-    | [] -> x
-    | n::rest -> f n (foldr f x rest)
+    | [] -> seed
+    | n::rest -> f n (foldr f seed rest)
 
 let sum = foldr (+) 0
 let product = foldr (*) 1
