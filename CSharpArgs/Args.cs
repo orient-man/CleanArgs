@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace CSharpArgs
 {
@@ -14,7 +16,7 @@ namespace CSharpArgs
                     { "##", DoubleArgumentMarshaler.Marshal }
                 };
 
-        private IDictionary<char, Marshaler> marshalers;
+        private IReadOnlyDictionary<char, Marshaler> marshalers;
         private IEnumerator<string> currentArgument;
 
         private readonly IDictionary<char, object> values =
@@ -27,34 +29,32 @@ namespace CSharpArgs
 
         private void Parse(string schema, IEnumerable<string> args)
         {
-            marshalers = new Dictionary<char, Marshaler>();
-
-            ParseSchema(schema);
+            marshalers = ParseSchema(schema);
             ParseArguments(args);
         }
 
         // example schema: "l,p#,d*"
-        private void ParseSchema(string schema)
+        private static IReadOnlyDictionary<char, Marshaler> ParseSchema(string schema)
         {
-            foreach (var element in schema.Split(','))
-                if (element.Length > 0)
-                    ParseSchemaElement(element.Trim());
+            return schema.Split(',')
+                .Where(o => o.Length > 0)
+                .Select(o => o.Trim())
+                .Select(o => new { id = o[0], format = o.Substring(1) })
+                .ToDictionary(o => o.id, o => ParseSchemaElement(o.id, o.format));
         }
 
-        private void ParseSchemaElement(string element)
+        private static Marshaler ParseSchemaElement(char id, string format)
         {
-            var elementId = element[0];
-            var elementTail = element.Substring(1);
-            ValidateSchemaElementId(elementId);
+            ValidateSchemaElementId(id);
 
             Marshaler marshaler;
-            if (!Marshalers.TryGetValue(elementTail, out marshaler))
+            if (!Marshalers.TryGetValue(format, out marshaler))
                 throw new ArgsException(
                     ErrorCode.InvalidArgumentFormat,
-                    elementId,
-                    elementTail);
+                    id,
+                    format);
 
-            marshalers.Add(elementId, marshaler);
+            return marshaler;
         }
 
         private static void ValidateSchemaElementId(char elementId)
