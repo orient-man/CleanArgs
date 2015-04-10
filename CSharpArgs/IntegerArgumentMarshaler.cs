@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace CSharpArgs
 {
-    public class IntegerArgumentMarshaler : IArgumentMarshaler
+    public static class IntegerArgumentMarshaler
     {
-        public object Set(IEnumerator<string> currentArgument)
+        public static object Marshal(IEnumerator<string> currentArgument)
         {
             if (!currentArgument.MoveNext())
                 throw new ArgsException(ErrorCode.MissingInteger);

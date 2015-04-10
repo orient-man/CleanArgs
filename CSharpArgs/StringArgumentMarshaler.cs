@@ -2,9 +2,9 @@
 
 namespace CSharpArgs
 {
-    public class StringArgumentMarshaler : IArgumentMarshaler
+    public static class StringArgumentMarshaler
     {
-        public object Set(IEnumerator<string> currentArgument)
+        public static object Marshal(IEnumerator<string> currentArgument)
         {
             if (!currentArgument.MoveNext())
                 throw new ArgsException(ErrorCode.MissingString);

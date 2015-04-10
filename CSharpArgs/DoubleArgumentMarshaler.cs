@@ -4,9 +4,9 @@ using System.Globalization;
 
 namespace CSharpArgs
 {
-    public class DoubleArgumentMarshaler : IArgumentMarshaler
+    public static class DoubleArgumentMarshaler
     {
-        public object Set(IEnumerator<string> currentArgument)
+        public static object Marshal(IEnumerator<string> currentArgument)
         {
             if (!currentArgument.MoveNext())
                 throw new ArgsException(ErrorCode.MissingDouble);

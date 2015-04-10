@@ -2,9 +2,9 @@
 
 namespace CSharpArgs
 {
-    public class BooleanArgumentMarshaler : IArgumentMarshaler
+    public static class BooleanArgumentMarshaler
     {
-        public object Set(IEnumerator<string> currentArgument)
+        public static object Marshal(IEnumerator<string> currentArgument)
         {
             return true;
         }

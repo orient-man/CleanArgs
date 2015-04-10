@@ -1,23 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace CSharpArgs
 {
     public class Args
     {
-        private static readonly IReadOnlyDictionary<string, Func<IArgumentMarshaler>>
+        private static readonly IReadOnlyDictionary<string, Marshaler>
             Marshalers =
-                new Dictionary<string, Func<IArgumentMarshaler>>
+                new Dictionary<string, Marshaler>
                 {
-                    { "", () => new BooleanArgumentMarshaler() },
-                    { "*", () => new StringArgumentMarshaler() },
-                    { "#", () => new IntegerArgumentMarshaler() },
-                    { "##", () => new DoubleArgumentMarshaler() }
+                    { "", BooleanArgumentMarshaler.Marshal },
+                    { "*", StringArgumentMarshaler.Marshal },
+                    { "#", IntegerArgumentMarshaler.Marshal },
+                    { "##", DoubleArgumentMarshaler.Marshal }
                 };
 
         private readonly string schema;
         private readonly IEnumerable<string> args;
-        private Dictionary<char, IArgumentMarshaler> marshalers;
+        private Dictionary<char, Marshaler> marshalers;
         private IEnumerator<string> currentArgument;
 
         private readonly IDictionary<char, object> values =
@@ -33,7 +32,7 @@ namespace CSharpArgs
 
         private void Parse()
         {
-            marshalers = new Dictionary<char, IArgumentMarshaler>();
+            marshalers = new Dictionary<char, Marshaler>();
 
             ParseSchema();
             ParseArguments();
@@ -53,14 +52,14 @@ namespace CSharpArgs
             var elementTail = element.Substring(1);
             ValidateSchemaElementId(elementId);
 
-            Func<IArgumentMarshaler> factory;
-            if (!Marshalers.TryGetValue(elementTail, out factory))
+            Marshaler marshaler;
+            if (!Marshalers.TryGetValue(elementTail, out marshaler))
                 throw new ArgsException(
                     ErrorCode.InvalidArgumentFormat,
                     elementId,
                     elementTail);
 
-            marshalers.Add(elementId, factory());
+            marshalers.Add(elementId, marshaler);
         }
 
         private static void ValidateSchemaElementId(char elementId)
@@ -96,8 +95,7 @@ namespace CSharpArgs
         {
             try
             {
-                var m = marshalers[argChar];
-                values.Add(argChar, m.Set(currentArgument));
+                values.Add(argChar, marshalers[argChar](currentArgument));
             }
             catch (KeyNotFoundException)
             {
