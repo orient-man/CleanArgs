@@ -76,7 +76,7 @@ namespace CSharpArgs
         public void TestSimpleBooleanPresent()
         {
             var args = new Args("x", new[] { "-x" });
-            Assert.AreEqual(true, args.GetBoolean('x'));
+            Assert.AreEqual(true, args.Get<bool>('x'));
             Assert.AreEqual(1, args.Cardinality());
         }
 
@@ -85,7 +85,7 @@ namespace CSharpArgs
         {
             var args = new Args("x*", new[] { "-x", "param" });
             Assert.True(args.Has('x'));
-            Assert.AreEqual("param", args.GetString('x'));
+            Assert.AreEqual("param", args.Get<string>('x'));
             Assert.AreEqual(1, args.Cardinality());
         }
 
@@ -118,7 +118,7 @@ namespace CSharpArgs
         {
             var args = new Args("x#", new[] { "-x", "42" });
             Assert.True(args.Has('x'));
-            Assert.AreEqual(42, args.GetInt('x'));
+            Assert.AreEqual(42, args.Get<int>('x'));
             Assert.AreEqual(1, args.Cardinality());
         }
 
@@ -158,7 +158,7 @@ namespace CSharpArgs
         {
             var args = new Args("x##", new[] { "-x", "42.3" });
             Assert.True(args.Has('x'));
-            Assert.AreEqual(42.3, args.GetDouble('x'), .001);
+            Assert.AreEqual(42.3, args.Get<double>('x'), .001);
         }
 
         [Test]
@@ -196,8 +196,8 @@ namespace CSharpArgs
         public void TestExtraArgumentsOnTheEnd()
         {
             var args = new Args("x,y*", new[] { "-x", "-y", "alpha", "beta" });
-            Assert.True(args.GetBoolean('x'));
-            Assert.AreEqual("alpha", args.GetString('y'));
+            Assert.True(args.Get<bool>('x'));
+            Assert.AreEqual("alpha", args.Get<string>('y'));
             Assert.AreEqual(2, args.Cardinality());
         }
 
@@ -207,8 +207,8 @@ namespace CSharpArgs
             var args = new Args("x,y", new[] { "-x", "alpha", "-y", "beta" });
             Assert.True(args.Has('x'));
             Assert.True(args.Has('y'));
-            Assert.True(args.GetBoolean('x'));
-            Assert.True(args.GetBoolean('y'));
+            Assert.True(args.Get<bool>('x'));
+            Assert.True(args.Get<bool>('y'));
             Assert.AreEqual(2, args.Cardinality());
         }
     }

@@ -11,9 +11,9 @@ namespace CleanArgs
             try
             {
                 var arg = new Args("l,p#,d*", args);
-                var logging = arg.GetBoolean('l');
-                var port = arg.GetInt('p');
-                var directory = arg.GetString('d');
+                var logging = arg.Get<bool>('l');
+                var port = arg.Get<int>('p');
+                var directory = arg.Get<string>('d');
                 ExecuteApplication(logging, port, directory);
             }
             catch (ArgsException e)

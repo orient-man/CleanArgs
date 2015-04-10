@@ -18,8 +18,10 @@ namespace CSharpArgs
         private readonly string schema;
         private readonly IEnumerable<string> args;
         private Dictionary<char, IArgumentMarshaler> marshalers;
-        private HashSet<char> argsFound;
         private IEnumerator<string> currentArgument;
+
+        private readonly IDictionary<char, object> values =
+            new Dictionary<char, object>();
 
         public Args(string schema, IEnumerable<string> args)
         {
@@ -32,7 +34,6 @@ namespace CSharpArgs
         private void Parse()
         {
             marshalers = new Dictionary<char, IArgumentMarshaler>();
-            argsFound = new HashSet<char>();
 
             ParseSchema();
             ParseArguments();
@@ -96,8 +97,7 @@ namespace CSharpArgs
             try
             {
                 var m = marshalers[argChar];
-                argsFound.Add(argChar);
-                m.Set(currentArgument);
+                values.Add(argChar, m.Set(currentArgument));
             }
             catch (KeyNotFoundException)
             {
@@ -112,32 +112,21 @@ namespace CSharpArgs
 
         public int Cardinality()
         {
-            return argsFound.Count;
+            return values.Count;
         }
 
         public bool Has(char arg)
         {
-            return argsFound.Contains(arg);
+            return values.ContainsKey(arg);
         }
 
-        public bool GetBoolean(char arg)
+        public T Get<T>(char arg)
         {
-            return BooleanArgumentMarshaler.GetValue(marshalers[arg]);
-        }
+            object value;
+            if (!values.TryGetValue(arg, out value))
+                return default(T);
 
-        public string GetString(char arg)
-        {
-            return StringArgumentMarshaler.GetValue(marshalers[arg]);
-        }
-
-        public int GetInt(char arg)
-        {
-            return IntegerArgumentMarshaler.GetValue(marshalers[arg]);
-        }
-
-        public double GetDouble(char arg)
-        {
-            return DoubleArgumentMarshaler.GetValue(marshalers[arg]);
+            return value is T ? (T)value : default(T);
         }
     }
 }

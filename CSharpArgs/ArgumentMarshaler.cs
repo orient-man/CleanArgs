@@ -4,6 +4,6 @@ namespace CSharpArgs
 {
     public interface IArgumentMarshaler
     {
-        void Set(IEnumerator<string> currentArgument);
+        object Set(IEnumerator<string> currentArgument);
     }
 }
