@@ -17,7 +17,6 @@ namespace CSharpArgs
                 };
 
         private IReadOnlyDictionary<char, Marshaler> marshalers;
-        private IEnumerator<string> currentArgument;
 
         private readonly IReadOnlyDictionary<char, object> values;
 
@@ -69,21 +68,23 @@ namespace CSharpArgs
             IEnumerable<string> args)
         {
             var values = new Dictionary<char, object>();
-            currentArgument = args.GetEnumerator();
+            var currentArgument = args.GetEnumerator();
             while (currentArgument.MoveNext())
             {
                 var arg = currentArgument.Current;
                 if (arg.StartsWith("-"))
                 {
                     for (var i = 1; i < arg.Length; i++)
-                        values[arg[i]] = ParseElement(arg[i]);
+                        values[arg[i]] = ParseElement(arg[i], currentArgument);
                 }
             }
 
             return values;
         }
 
-        private object ParseElement(char argChar)
+        private object ParseElement(
+            char argChar,
+            IEnumerator<string> currentArgument)
         {
             try
             {
