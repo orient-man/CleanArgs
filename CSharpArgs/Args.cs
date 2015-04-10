@@ -16,21 +16,11 @@ namespace CSharpArgs
                     { "##", DoubleArgumentMarshaler.Marshal }
                 };
 
-        private IReadOnlyDictionary<char, Marshaler> marshalers;
-
         private readonly IReadOnlyDictionary<char, object> values;
 
         public Args(string schema, IEnumerable<string> args)
         {
-            values = Parse(schema, args);
-        }
-
-        private IReadOnlyDictionary<char, object> Parse(
-            string schema,
-            IEnumerable<string> args)
-        {
-            marshalers = ParseSchema(schema);
-            return ParseArguments(args);
+            values = ParseArguments(args, ParseSchema(schema));
         }
 
         // example schema: "l,p#,d*"
@@ -64,8 +54,9 @@ namespace CSharpArgs
         }
 
         // example arguments: -l -p 4444 -d "C:\Windows\Temp"
-        private IReadOnlyDictionary<char, object> ParseArguments(
-            IEnumerable<string> args)
+        private static IReadOnlyDictionary<char, object> ParseArguments(
+            IEnumerable<string> args,
+            IReadOnlyDictionary<char, Marshaler> marshalers)
         {
             var values = new Dictionary<char, object>();
             var currentArgument = args.GetEnumerator();
@@ -75,16 +66,17 @@ namespace CSharpArgs
                 if (arg.StartsWith("-"))
                 {
                     for (var i = 1; i < arg.Length; i++)
-                        values[arg[i]] = ParseElement(arg[i], currentArgument);
+                        values[arg[i]] = ParseElement(arg[i], currentArgument, marshalers);
                 }
             }
 
             return values;
         }
 
-        private object ParseElement(
+        private static object ParseElement(
             char argChar,
-            IEnumerator<string> currentArgument)
+            IEnumerator<string> currentArgument,
+            IReadOnlyDictionary<char, Marshaler> marshalers)
         {
             try
             {
