@@ -14,9 +14,7 @@ namespace CSharpArgs
                     { "##", DoubleArgumentMarshaler.Marshal }
                 };
 
-        private readonly string schema;
-        private readonly IEnumerable<string> args;
-        private Dictionary<char, Marshaler> marshalers;
+        private IDictionary<char, Marshaler> marshalers;
         private IEnumerator<string> currentArgument;
 
         private readonly IDictionary<char, object> values =
@@ -24,22 +22,19 @@ namespace CSharpArgs
 
         public Args(string schema, IEnumerable<string> args)
         {
-            this.schema = schema;
-            this.args = args;
-
-            Parse();
+            Parse(schema, args);
         }
 
-        private void Parse()
+        private void Parse(string schema, IEnumerable<string> args)
         {
             marshalers = new Dictionary<char, Marshaler>();
 
-            ParseSchema();
-            ParseArguments();
+            ParseSchema(schema);
+            ParseArguments(args);
         }
 
         // example schema: "l,p#,d*"
-        private void ParseSchema()
+        private void ParseSchema(string schema)
         {
             foreach (var element in schema.Split(','))
                 if (element.Length > 0)
@@ -69,7 +64,7 @@ namespace CSharpArgs
         }
 
         // example arguments: -l -p 4444 -d "C:\Windows\Temp"
-        private void ParseArguments()
+        private void ParseArguments(IEnumerable<string> args)
         {
             currentArgument = args.GetEnumerator();
             while (currentArgument.MoveNext())
