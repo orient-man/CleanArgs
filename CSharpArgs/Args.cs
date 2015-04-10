@@ -20,15 +20,16 @@ namespace CSharpArgs
 
         public Args(string schema, IEnumerable<string> args)
         {
-            values = ParseArguments(args, ParseSchema(schema));
+            values = ParseArguments(args.GetEnumerator(), ParseSchema(schema))
+                .ToDictionary(o => o.Item1, o => o.Item2);
         }
 
         // example schema: "l,p#,d*"
         private static IReadOnlyDictionary<char, Marshaler> ParseSchema(string schema)
         {
             return schema.Split(',')
-                .Where(o => o.Length > 0)
                 .Select(o => o.Trim())
+                .Where(o => o.Length > 0)
                 .Select(o => new { id = o[0], format = o.Substring(1) })
                 .ToDictionary(o => o.id, o => ParseSchemaElement(o.id, o.format));
         }
@@ -54,33 +55,28 @@ namespace CSharpArgs
         }
 
         // example arguments: -l -p 4444 -d "C:\Windows\Temp"
-        private static IReadOnlyDictionary<char, object> ParseArguments(
-            IEnumerable<string> args,
-            IReadOnlyDictionary<char, Marshaler> marshalers)
+        private static IEnumerable<Tuple<char, object>> ParseArguments(
+            IEnumerator<string> args,
+            IReadOnlyDictionary<char, Marshaler> schema)
         {
-            var values = new Dictionary<char, object>();
-            var currentArgument = args.GetEnumerator();
-            while (currentArgument.MoveNext())
-            {
-                var arg = currentArgument.Current;
-                if (arg.StartsWith("-"))
-                {
-                    for (var i = 1; i < arg.Length; i++)
-                        values[arg[i]] = ParseElement(arg[i], currentArgument, marshalers);
-                }
-            }
+            while (args.MoveNext())
+                foreach (var el in FindElements(args.Current))
+                    yield return Tuple.Create(el, ParseElement(el, args, schema));
+        }
 
-            return values;
+        private static IEnumerable<char> FindElements(string arg)
+        {
+            return arg.StartsWith("-") ? arg.Skip(1) : Enumerable.Empty<char>();
         }
 
         private static object ParseElement(
             char argChar,
             IEnumerator<string> currentArgument,
-            IReadOnlyDictionary<char, Marshaler> marshalers)
+            IReadOnlyDictionary<char, Marshaler> schema)
         {
             try
             {
-                return marshalers[argChar](currentArgument);
+                return schema[argChar](currentArgument);
             }
             catch (KeyNotFoundException)
             {
