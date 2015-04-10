@@ -19,18 +19,19 @@ namespace CSharpArgs
         private IReadOnlyDictionary<char, Marshaler> marshalers;
         private IEnumerator<string> currentArgument;
 
-        private readonly IDictionary<char, object> values =
-            new Dictionary<char, object>();
+        private readonly IReadOnlyDictionary<char, object> values;
 
         public Args(string schema, IEnumerable<string> args)
         {
-            Parse(schema, args);
+            values = Parse(schema, args);
         }
 
-        private void Parse(string schema, IEnumerable<string> args)
+        private IReadOnlyDictionary<char, object> Parse(
+            string schema,
+            IEnumerable<string> args)
         {
             marshalers = ParseSchema(schema);
-            ParseArguments(args);
+            return ParseArguments(args);
         }
 
         // example schema: "l,p#,d*"
@@ -64,33 +65,29 @@ namespace CSharpArgs
         }
 
         // example arguments: -l -p 4444 -d "C:\Windows\Temp"
-        private void ParseArguments(IEnumerable<string> args)
+        private IReadOnlyDictionary<char, object> ParseArguments(
+            IEnumerable<string> args)
         {
+            var values = new Dictionary<char, object>();
             currentArgument = args.GetEnumerator();
             while (currentArgument.MoveNext())
             {
                 var arg = currentArgument.Current;
-                ParseArgument(arg);
+                if (arg.StartsWith("-"))
+                {
+                    for (var i = 1; i < arg.Length; i++)
+                        values[arg[i]] = ParseElement(arg[i]);
+                }
             }
+
+            return values;
         }
 
-        private void ParseArgument(string arg)
-        {
-            if (arg.StartsWith("-"))
-                ParseElements(arg);
-        }
-
-        private void ParseElements(string arg)
-        {
-            for (var i = 1; i < arg.Length; i++)
-                ParseElement(arg[i]);
-        }
-
-        private void ParseElement(char argChar)
+        private object ParseElement(char argChar)
         {
             try
             {
-                values.Add(argChar, marshalers[argChar](currentArgument));
+                return marshalers[argChar](currentArgument);
             }
             catch (KeyNotFoundException)
             {
