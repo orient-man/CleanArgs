@@ -30,10 +30,7 @@ namespace CSharpArgs2
                 .Split(',')
                 .Select(o => o.Trim())
                 .Where(o => o.Length > 0)
-                .Select(o => new { ElementId = o[0], ElementTail = o.Substring(1) })
-                .ToDictionary(
-                    o => o.ElementId,
-                    o => ParseSchemaElement(o.ElementId, o.ElementTail));
+                .ToDictionary(o => o[0], o => ParseSchemaElement(o[0], o.Substring(1)));
         }
 
         private static IArgumentMarshaler ParseSchemaElement(
