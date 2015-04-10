@@ -1,9 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace CSharpArgs
 {
     public class Args
     {
+        private static readonly IReadOnlyDictionary<string, Func<IArgumentMarshaler>>
+            Marshalers =
+                new Dictionary<string, Func<IArgumentMarshaler>>
+                {
+                    { "", () => new BooleanArgumentMarshaler() },
+                    { "*", () => new StringArgumentMarshaler() },
+                    { "#", () => new IntegerArgumentMarshaler() },
+                    { "##", () => new DoubleArgumentMarshaler() }
+                };
+
         private readonly string schema;
         private readonly IEnumerable<string> args;
         private Dictionary<char, IArgumentMarshaler> marshalers;
@@ -40,19 +51,15 @@ namespace CSharpArgs
             var elementId = element[0];
             var elementTail = element.Substring(1);
             ValidateSchemaElementId(elementId);
-            if (elementTail.Length == 0)
-                marshalers.Add(elementId, new BooleanArgumentMarshaler());
-            else if (elementTail == "*")
-                marshalers.Add(elementId, new StringArgumentMarshaler());
-            else if (elementTail == "#")
-                marshalers.Add(elementId, new IntegerArgumentMarshaler());
-            else if (elementTail == "##")
-                marshalers.Add(elementId, new DoubleArgumentMarshaler());
-            else
+
+            Func<IArgumentMarshaler> factory;
+            if (!Marshalers.TryGetValue(elementTail, out factory))
                 throw new ArgsException(
                     ErrorCode.InvalidArgumentFormat,
                     elementId,
                     elementTail);
+
+            marshalers.Add(elementId, factory());
         }
 
         private static void ValidateSchemaElementId(char elementId)
