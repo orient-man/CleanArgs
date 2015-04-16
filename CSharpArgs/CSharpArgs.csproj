@@ -46,12 +46,14 @@
     <Compile Include="ArgsException.cs" />
     <Compile Include="ArgsExceptionTests.cs" />
     <Compile Include="ArgsTests.cs" />
+    <Compile Include="ArgumentsParser.cs" />
     <Compile Include="BooleanArgumentMarshaler.cs" />
     <Compile Include="DoubleArgumentMarshaler.cs" />
     <Compile Include="ErrorCode.cs" />
     <Compile Include="IntegerArgumentMarshaler.cs" />
     <Compile Include="Marshaler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SchemaParser.cs" />
     <Compile Include="StringArgumentMarshaler.cs" />
   </ItemGroup>
   <ItemGroup>
