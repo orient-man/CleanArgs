@@ -4,7 +4,7 @@ namespace CSharpArgs
 {
     public class StringArgumentMarshaler : IArgumentMarshaler
     {
-        private string stringValue = "";
+        private string stringValue;
 
         public void Set(IEnumerator<string> currentArgument)
         {
