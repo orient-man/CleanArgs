@@ -1,0 +1,117 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=0698B58A03FEB04AA13292F356977AB5/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=0698B58A03FEB04AA13292F356977AB5/Shortcut/@EntryValue">dmfac</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=0698B58A03FEB04AA13292F356977AB5/Description/@EntryValue">Marshalers factory</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=0698B58A03FEB04AA13292F356977AB5/Text/@EntryValue">            var Marshalers =&#xD;
+                new Dictionary&lt;string, Func&lt;IArgumentMarshaler&gt;&gt;&#xD;
+                {&#xD;
+                    { "", () =&gt; new BooleanArgumentMarshaler() },&#xD;
+                    { "*", () =&gt; new StringArgumentMarshaler() },&#xD;
+                    { "#", () =&gt; new IntegerArgumentMarshaler() },&#xD;
+                    { "##", () =&gt; new DoubleArgumentMarshaler() }&#xD;
+                };&#xD;
+            Func&lt;IArgumentMarshaler&gt; factory;&#xD;
+</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=0698B58A03FEB04AA13292F356977AB5/Reformat/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=0698B58A03FEB04AA13292F356977AB5/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=0698B58A03FEB04AA13292F356977AB5/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=0698B58A03FEB04AA13292F356977AB5/Scope/=C3001E7C0DA78E4487072B7E050D86C5/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=0698B58A03FEB04AA13292F356977AB5/Scope/=C3001E7C0DA78E4487072B7E050D86C5/Type/@EntryValue">InCSharpFile</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=0698B58A03FEB04AA13292F356977AB5/Scope/=C3001E7C0DA78E4487072B7E050D86C5/CustomProperties/=minimumLanguageVersion/@EntryIndexedValue">2.0</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=510B28A876BB794E8323132B4AA04DEB/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=510B28A876BB794E8323132B4AA04DEB/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=510B28A876BB794E8323132B4AA04DEB/Description/@EntryValue">Generic GetValue</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=510B28A876BB794E8323132B4AA04DEB/Reformat/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=510B28A876BB794E8323132B4AA04DEB/Scope/=C3001E7C0DA78E4487072B7E050D86C5/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=510B28A876BB794E8323132B4AA04DEB/Scope/=C3001E7C0DA78E4487072B7E050D86C5/CustomProperties/=minimumLanguageVersion/@EntryIndexedValue">2.0</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=510B28A876BB794E8323132B4AA04DEB/Scope/=C3001E7C0DA78E4487072B7E050D86C5/Type/@EntryValue">InCSharpFile</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=510B28A876BB794E8323132B4AA04DEB/Shortcut/@EntryValue">dmval</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=510B28A876BB794E8323132B4AA04DEB/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=510B28A876BB794E8323132B4AA04DEB/Text/@EntryValue">        private readonly IDictionary&lt;char, object&gt; values =&#xD;
+            new Dictionary&lt;char, object&gt;();&#xD;
+&#xD;
+        public T Get&lt;T&gt;(char arg)&#xD;
+        {&#xD;
+            object value;&#xD;
+            if (!values.TryGetValue(arg, out value))&#xD;
+                return default(T);&#xD;
+&#xD;
+            return value is T ? (T)value : default(T);&#xD;
+        }</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=5515047A9D188749876F4523CA967235/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=5515047A9D188749876F4523CA967235/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=5515047A9D188749876F4523CA967235/Description/@EntryValue">KeyValuePair.Create</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=5515047A9D188749876F4523CA967235/Reformat/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=5515047A9D188749876F4523CA967235/Scope/=C3001E7C0DA78E4487072B7E050D86C5/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=5515047A9D188749876F4523CA967235/Scope/=C3001E7C0DA78E4487072B7E050D86C5/CustomProperties/=minimumLanguageVersion/@EntryIndexedValue">2.0</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=5515047A9D188749876F4523CA967235/Scope/=C3001E7C0DA78E4487072B7E050D86C5/Type/@EntryValue">InCSharpFile</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=5515047A9D188749876F4523CA967235/Shortcut/@EntryValue">dmkvp</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=5515047A9D188749876F4523CA967235/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=5515047A9D188749876F4523CA967235/Text/@EntryValue">    public static class KeyValuePair&#xD;
+    {&#xD;
+        public static KeyValuePair&lt;TKey, TValue&gt; Create&lt;TKey, TValue&gt;(&#xD;
+            TKey key,&#xD;
+            TValue value)&#xD;
+        {&#xD;
+            return new KeyValuePair&lt;TKey, TValue&gt;(key, value);&#xD;
+        }&#xD;
+    }&#xD;
+</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8481E49CF26C7C46A16288E2283D31B4/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8481E49CF26C7C46A16288E2283D31B4/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8481E49CF26C7C46A16288E2283D31B4/Description/@EntryValue">Marshalers as functions</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8481E49CF26C7C46A16288E2283D31B4/Reformat/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8481E49CF26C7C46A16288E2283D31B4/Scope/=C3001E7C0DA78E4487072B7E050D86C5/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8481E49CF26C7C46A16288E2283D31B4/Scope/=C3001E7C0DA78E4487072B7E050D86C5/CustomProperties/=minimumLanguageVersion/@EntryIndexedValue">2.0</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8481E49CF26C7C46A16288E2283D31B4/Scope/=C3001E7C0DA78E4487072B7E050D86C5/Type/@EntryValue">InCSharpFile</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8481E49CF26C7C46A16288E2283D31B4/Shortcut/@EntryValue">dmfac2</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8481E49CF26C7C46A16288E2283D31B4/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8481E49CF26C7C46A16288E2283D31B4/Text/@EntryValue">        private static readonly IReadOnlyDictionary&lt;string, Marshaler&gt;&#xD;
+            Marshalers =&#xD;
+                new Dictionary&lt;string, Marshaler&gt;&#xD;
+                {&#xD;
+                    { "", new BooleanArgumentMarshaler().Marshal },&#xD;
+                    { "*", new StringArgumentMarshaler().Marshal },&#xD;
+                    { "#", new IntegerArgumentMarshaler().Marshal },&#xD;
+                    { "##", new DoubleArgumentMarshaler().Marshal }&#xD;
+                };</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=A267C7EE535CAE46BF4353772372C6BF/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=A267C7EE535CAE46BF4353772372C6BF/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=A267C7EE535CAE46BF4353772372C6BF/Description/@EntryValue">Linq version of ParseSchema</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=A267C7EE535CAE46BF4353772372C6BF/Reformat/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=A267C7EE535CAE46BF4353772372C6BF/Scope/=C3001E7C0DA78E4487072B7E050D86C5/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=A267C7EE535CAE46BF4353772372C6BF/Scope/=C3001E7C0DA78E4487072B7E050D86C5/CustomProperties/=minimumLanguageVersion/@EntryIndexedValue">2.0</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=A267C7EE535CAE46BF4353772372C6BF/Scope/=C3001E7C0DA78E4487072B7E050D86C5/Type/@EntryValue">InCSharpFile</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=A267C7EE535CAE46BF4353772372C6BF/Shortcut/@EntryValue">dmsplit</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=A267C7EE535CAE46BF4353772372C6BF/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=A267C7EE535CAE46BF4353772372C6BF/Text/@EntryValue">            return schema.Split(',')&#xD;
+                .Where(o =&gt; o.Length &gt; 0)&#xD;
+                .Select(o =&gt; o.Trim())&#xD;
+                .Select(o =&gt; new { id = o[0], format = o.Substring(1) })&#xD;
+                .ToDictionary(o =&gt; o.id, o =&gt; ParseSchemaElement(o.id, o.format));</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=C96111C9EF68FC40B9102DD8D32F1E44/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=C96111C9EF68FC40B9102DD8D32F1E44/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=C96111C9EF68FC40B9102DD8D32F1E44/Description/@EntryValue">Marshaler as delegate</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=C96111C9EF68FC40B9102DD8D32F1E44/Reformat/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=C96111C9EF68FC40B9102DD8D32F1E44/Scope/=C3001E7C0DA78E4487072B7E050D86C5/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=C96111C9EF68FC40B9102DD8D32F1E44/Scope/=C3001E7C0DA78E4487072B7E050D86C5/CustomProperties/=minimumLanguageVersion/@EntryIndexedValue">2.0</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=C96111C9EF68FC40B9102DD8D32F1E44/Scope/=C3001E7C0DA78E4487072B7E050D86C5/Type/@EntryValue">InCSharpFile</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=C96111C9EF68FC40B9102DD8D32F1E44/Shortcut/@EntryValue">dmdel</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=C96111C9EF68FC40B9102DD8D32F1E44/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=C96111C9EF68FC40B9102DD8D32F1E44/Text/@EntryValue">    public delegate object Marshaler(IEnumerator&lt;string&gt; currentArgument);&#xD;
+</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E6E4DA7EE49BAA44AFF95C3DFC138522/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E6E4DA7EE49BAA44AFF95C3DFC138522/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E6E4DA7EE49BAA44AFF95C3DFC138522/Description/@EntryValue">FindElements</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E6E4DA7EE49BAA44AFF95C3DFC138522/Reformat/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E6E4DA7EE49BAA44AFF95C3DFC138522/Scope/=C3001E7C0DA78E4487072B7E050D86C5/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E6E4DA7EE49BAA44AFF95C3DFC138522/Scope/=C3001E7C0DA78E4487072B7E050D86C5/CustomProperties/=minimumLanguageVersion/@EntryIndexedValue">2.0</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E6E4DA7EE49BAA44AFF95C3DFC138522/Scope/=C3001E7C0DA78E4487072B7E050D86C5/Type/@EntryValue">InCSharpFile</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E6E4DA7EE49BAA44AFF95C3DFC138522/Shortcut/@EntryValue">dmfindelem</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E6E4DA7EE49BAA44AFF95C3DFC138522/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E6E4DA7EE49BAA44AFF95C3DFC138522/Text/@EntryValue">&#xD;
+        private static IEnumerable&lt;char&gt; FindElements(string arg)&#xD;
+        {&#xD;
+            return arg.StartsWith("-") ? arg.Skip(1) : Enumerable.Empty&lt;char&gt;();&#xD;
+        }&#xD;
+</s:String></wpf:ResourceDictionary>
