@@ -60,7 +60,7 @@ let StringMarshaller arg = function
     | _ -> Failure(MissingString arg)
 
 let (|ValidArgument|_|) arg =
-    match List.ofSeq arg with | '-'::c::[] -> Some c | _ -> None
+    match List.ofSeq arg with | '-'::[c] -> Some c | _ -> None
 
 // -x [a; b; c; -y] -> (x, [a; b; c]), -y
 let StringListMarshaller arg tail : MarshallingResult =
@@ -87,7 +87,7 @@ let DoubleMarshaller arg = function
     | _ -> Failure(MissingDouble arg)
 
 type SchemaElement with
-    member elem.parse : Marshaller =
+    member elem.Parse : Marshaller =
         match elem with
         | Bool -> BoolMarshaller
         | String -> StringMarshaller
@@ -103,7 +103,7 @@ let parseArgs (schema : string) args : ParsingResult =
         | [] -> Success(acc |> Map.ofList)
         | ValidArgument arg::tail when schema.ContainsKey arg ->
             let parseTail (value, tail) = parse schema (value::acc) tail
-            schema.[arg].parse arg tail >>= parseTail
+            schema.[arg].Parse arg tail >>= parseTail
         | _::tail -> parse schema acc tail
 
     parseSchema schema >>= fun schema -> parse schema [] args
